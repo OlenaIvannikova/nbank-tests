@@ -1,11 +1,14 @@
 package specs;
 
+import constants.messages.ErrorMessage;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 
 import java.util.List;
+
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 // Готовые шаблоны для проверки ответов (ResponseSpecification)
 public class ResponseSpecs {
@@ -29,10 +32,25 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification requestReturnsBadRequest(String errorKey, List<String> errors) {
+    public static ResponseSpecification requestReturnsBadRequest(String errorKey, List<String> errorMessages) {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .expectBody(errorKey, Matchers.containsInAnyOrder(errors.toArray()))
+                .expectBody(errorKey, containsInAnyOrder(errorMessages.toArray()))
+                .build();
+    }
+
+    public static ResponseSpecification requestReturnsBadRequest(String errorMessage) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectBody(equalTo(errorMessage))
+                .build();
+    }
+
+    public static ResponseSpecification accountAccessForbidden() {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_FORBIDDEN)
+                .expectBody(equalTo(
+                        ErrorMessage.UNAUTHORIZED_ACCOUNT_ACCESS.getValue()))
                 .build();
     }
 }

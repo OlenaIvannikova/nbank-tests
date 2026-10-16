@@ -1,4 +1,4 @@
-package iteration1;
+package api.tests;
 
 import configs.Config;
 import models.*;
@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Test;
 import requests.skeleton.Endpoint;
 import requests.skeleton.HttpHeaders;
 import requests.skeleton.requesters.CrudRequester;
-import requests.skeleton.requesters.ValidatedCrudRequester;
 import requests.steps.AdminSteps;
 import specs.RequestSpecs;
 import specs.ResponseSpecs;
+
+import base.BaseTest;
 
 
 public class LoginUserTest extends BaseTest {
@@ -23,7 +24,7 @@ public class LoginUserTest extends BaseTest {
                 .password(Config.getProperty("admin.password"))
                 .build();
 
-        new ValidatedCrudRequester<LoginUserResponse>(
+        new CrudRequester(
                 RequestSpecs.unauthSpec(),
                 Endpoint.LOGIN,
                 ResponseSpecs.requestReturnsOK())
@@ -34,7 +35,7 @@ public class LoginUserTest extends BaseTest {
     public void userCanGenerateAuthTokenTest() {
 
         // create user
-        CreateUserRequest userRequest = AdminSteps.createUser();
+        UserRequest userRequest = AdminSteps.createUser();
 
         // user generates auth token
         new CrudRequester(

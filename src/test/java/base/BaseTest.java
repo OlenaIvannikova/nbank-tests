@@ -1,5 +1,6 @@
-package iteration1;
+package base;
 
+import generators.TestDataStorage;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ public class BaseTest {
 
     @AfterEach
     public void afterTest() {
+        TestDataStorage.getStorage().deleteCreatedEntities();
         softly.assertAll();
     }
 }

@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateAccountResponse extends BaseModel {
+public class Transaction extends BaseModel {
 
     private long id;
-    private String accountNumber;
-    private double balance;
-    private List<String> transactions;
+    private BigDecimal amount;
+    private String type;
+    private String timestamp;
+    private long relatedAccountId;
+
 }

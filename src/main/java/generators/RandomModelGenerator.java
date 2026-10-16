@@ -5,6 +5,7 @@ import com.github.curiousoddman.rgxgen.RgxGen;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class RandomModelGenerator {
@@ -63,7 +64,9 @@ public class RandomModelGenerator {
         } else if (type.equals(Long.class) || type.equals(long.class)) {
             return random.nextLong(); // случайное значение, которое может быть отрицательным или положительным и иметь очень большую абсолютную величину.
         } else if (type.equals(Double.class) || type.equals(double.class)) {
-            return random.nextDouble() * 100; // диапазон от 0.0 до значения, меньшего 100.0
+            return random.nextDouble() * 100;
+        } else if (type.equals(BigDecimal.class)) {
+            return BigDecimal.valueOf(random.nextLong(1, 500_000), 2);
         } else if (type.equals(Boolean.class) || type.equals(boolean.class)) {
             return random.nextBoolean();
         } else if (type.equals(List.class)) {
@@ -78,7 +81,7 @@ public class RandomModelGenerator {
 
     // Метод умеет преобразовывать результат только в Integer и Long. Для остальных типов он возвращает String
     // Поскольку метод вернёт String, а field.set() не сможет записать его в Double -код упадёт
-    private static Object generateFromRegex(String regex, Class<?> type) {
+    public static Object generateFromRegex(String regex, Class<?> type) {
         RgxGen rgxGen = new RgxGen(regex);
         String result = rgxGen.generate();
         if (type.equals(Integer.class) || type.equals(int.class)) {
