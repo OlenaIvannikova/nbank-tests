@@ -35,9 +35,7 @@ public class ProfileUpdateTest extends BaseTest {
         softly.assertThat(profileResponse.getMessage())
                 .isEqualTo(SuccessMessage.PROFILE_UPDATED.getValue());
 
-        UserResponse updatedProfile = getProfile(user);
-
-        softly.assertThat(updatedProfile.getName())
+        softly.assertThat(getProfile(user).getName())
                 .as("name")
                 .isEqualTo(profileRequest.getName());
     }
@@ -56,5 +54,9 @@ public class ProfileUpdateTest extends BaseTest {
                 Endpoint.CUSTOMER_PROFILE_UPDATE,
                 ResponseSpecs.requestReturnsBadRequest(expectedErrorMessage))
                 .update(profileRequest);
+
+        softly.assertThat(getProfile(user).getName())
+                .as("name")
+                .isNull();
     }
 }

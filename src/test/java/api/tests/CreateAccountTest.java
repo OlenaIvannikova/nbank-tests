@@ -29,7 +29,7 @@ public class CreateAccountTest extends BaseTest {
                 user.getPassword(),
                 Endpoint.ACCOUNT_CREATION,
                 ResponseSpecs.entityWasCreated()
-        ).post(null);
+        ).post();
 
         // запросить все аккаунты пользователя и проверить, что наш аккаунт там
         List<AccountResponse> userAccounts = getAccounts(user);

@@ -14,11 +14,11 @@ import specs.ResponseSpecs;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static requests.steps.AdminSteps.createTwoDifferentUsers;
-import static requests.steps.UserSteps.createAccount;
-import static requests.steps.UserSteps.getAccounts;
+import static requests.steps.UserSteps.*;
 
 public class DepositTest extends BaseTest {
 
@@ -49,10 +49,20 @@ public class DepositTest extends BaseTest {
                 .anySatisfy(transaction -> {
                     assertThat(transaction.getAmount())
                             .isEqualByComparingTo(deposit.getBalance());
-
                     assertThat(TransactionType.valueOf(transaction.getType()))
                             .isEqualTo(TransactionType.DEPOSIT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(account.getId());
+                });
 
+        List<Transaction> accountTransactions = getAccountTransactions(user, account.getId());
+
+        softly.assertThat(accountTransactions)
+                .anySatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(deposit.getBalance());
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.DEPOSIT);
                     assertThat(transaction.getRelatedAccountId())
                             .isEqualTo(account.getId());
                 });
@@ -76,6 +86,15 @@ public class DepositTest extends BaseTest {
                 Endpoint.DEPOSIT,
                 ResponseSpecs.accountAccessForbidden())
                 .post(deposit);
+
+        Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
+        String paramName = endpoint.getPathParamNames().getFirst();
+
+        new CrudRequester(
+                RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
+                endpoint,
+                ResponseSpecs.accountAccessDenied())
+                .getByPathParams(Map.of(paramName, nonExistentAccountId));
     }
 
     @Test
@@ -93,6 +112,17 @@ public class DepositTest extends BaseTest {
                 Endpoint.DEPOSIT,
                 ResponseSpecs.accountAccessForbidden())
                 .post(deposit);
+
+        List<Transaction> accountTransactions = getAccountTransactions(users.get(1), accountOwnedByAnotherUser.getId());
+        softly.assertThat(accountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(deposit.getBalance());
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.DEPOSIT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(accountOwnedByAnotherUser.getId());
+                });
     }
 
     @ParameterizedTest
@@ -112,5 +142,15 @@ public class DepositTest extends BaseTest {
                 ResponseSpecs.requestReturnsBadRequest(expectedError))
                 .post(deposit);
 
+        List<Transaction> accountTransactions = getAccountTransactions(user, account.getId());
+        softly.assertThat(accountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(deposit.getBalance());
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.DEPOSIT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(account.getId());
+                });
     }
 }

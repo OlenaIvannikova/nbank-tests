@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import models.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Getter
 @AllArgsConstructor
 public enum Endpoint {
@@ -31,4 +36,17 @@ public enum Endpoint {
     private final String url;
     private final Class<? extends BaseModel> requestModel;
     private final Class<? extends BaseModel> responseModel;
+
+    public List<String> getPathParamNames() {
+        Matcher matcher = Pattern.compile("\\{([^{}]+)}")
+                .matcher(url);
+
+        List<String> paramNames = new ArrayList<>();
+
+        while (matcher.find()) {
+            paramNames.add(matcher.group(1));
+        }
+
+        return paramNames;
+    }
 }

@@ -58,6 +58,12 @@ public class CreateUserTest extends BaseTest {
                 Endpoint.ADMIN_USER_CREATION,
                 ResponseSpecs.requestReturnsBadRequest(expectedErrorKey, expectedErrors))
                 .post(userRequest);
+
+        List<UserResponse> users = getAllUsers();
+
+        assertThat(users)
+                .extracting(UserResponse::getUsername)
+                .doesNotContain(userRequest.getUsername());
     }
 }
 

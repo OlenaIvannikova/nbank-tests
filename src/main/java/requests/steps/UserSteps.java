@@ -1,9 +1,7 @@
 package requests.steps;
 
 import generators.RandomModelGenerator;
-import models.AccountResponse;
-import models.DepositRequest;
-import models.UserRequest;
+import models.*;
 import requests.skeleton.Endpoint;
 import requests.skeleton.requesters.CrudRequester;
 import requests.skeleton.requesters.ValidatedCrudRequester;
@@ -11,6 +9,7 @@ import specs.RequestSpecs;
 import specs.ResponseSpecs;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserSteps {
 
@@ -20,7 +19,7 @@ public class UserSteps {
                 userRequest.getPassword(),
                 Endpoint.ACCOUNT_CREATION,
                 ResponseSpecs.entityWasCreated()
-        ).post(null);
+        ).post();
     }
 
     private static AccountResponse createAccountWithNonZeroBalance(UserRequest user) {
@@ -79,6 +78,19 @@ public class UserSteps {
                 Endpoint.CUSTOMER_ACCOUNTS,
                 ResponseSpecs.requestReturnsOK())
                 .getAll(AccountResponse.class);
+    }
+
+    public static List<Transaction> getAccountTransactions(UserRequest user, Long accountId) {
+
+        Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
+        String paramName = endpoint.getPathParamNames().getFirst();
+
+        return new ValidatedCrudRequester<Transaction>(
+                RequestSpecs.authAsUser(
+                        user.getUsername(), user.getPassword()),
+                endpoint,
+                ResponseSpecs.requestReturnsOK())
+                .getByPathParams(Map.of(paramName, accountId));
     }
 
 }

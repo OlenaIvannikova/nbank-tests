@@ -68,6 +68,10 @@ public class ValidatedCrudRequester<M extends BaseModel> extends HttpRequest imp
         return createdModel;
     }
 
+    public M post() {
+        return post(null);
+    }
+
     @Override
     public M get(Long id) {
         return (M) crudRequester.get(id)

@@ -53,4 +53,13 @@ public class ResponseSpecs {
                         ErrorMessage.UNAUTHORIZED_ACCOUNT_ACCESS.getValue()))
                 .build();
     }
+
+    public static ResponseSpecification accountAccessDenied() {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_FORBIDDEN)
+                .expectBody(equalTo(
+                        ErrorMessage.ACCOUNT_ACCESS_FORBIDDEN.getValue()))
+                .build();
+    }
+
 }

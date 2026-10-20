@@ -15,9 +15,11 @@ import specs.ResponseSpecs;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static constants.messages.ErrorMessage.INVALID_TRANSFER;
 import static generators.RandomData.generateTransferAmount;
+import static org.assertj.core.api.Assertions.assertThat;
 import static requests.steps.AdminSteps.createTwoDifferentUsers;
 import static requests.steps.AdminSteps.createUser;
 import static requests.steps.TransferSteps.createTransferRequest;
@@ -64,6 +66,28 @@ public class TransferTest extends BaseTest {
         //  Проверили, что баланс получателя увеличился ровно на сумму трансфера
         softly.assertThat(receiverBalanceAfter)
                 .isEqualByComparingTo(receiverBalanceBefore.add(amount));
+
+        List<Transaction> senderAccountTransactions = getAccountTransactions(sender, senderAccount.getId());
+        softly.assertThat(senderAccountTransactions)
+                .anySatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_OUT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(receiverAccount.getId());
+                });
+
+        List<Transaction> receiverAccountTransactions = getAccountTransactions(receiver, receiverAccount.getId());
+        softly.assertThat(receiverAccountTransactions)
+                .anySatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_IN);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(senderAccount.getId());
+                });
     }
 
 
@@ -100,6 +124,28 @@ public class TransferTest extends BaseTest {
         softly.assertThat(receiverBalanceAfter)
                 .isEqualByComparingTo(receiverBalanceBefore.add(amount));
 
+        List<Transaction> senderAccountTransactions = getAccountTransactions(user, senderAccount.getId());
+        softly.assertThat(senderAccountTransactions)
+                .anySatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_OUT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(receiverAccount.getId());
+                });
+
+        List<Transaction> receiverAccountTransactions = getAccountTransactions(user, receiverAccount.getId());
+        softly.assertThat(receiverAccountTransactions)
+                .anySatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_IN);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(senderAccount.getId());
+                });
+
     }
 
     @ParameterizedTest
@@ -120,6 +166,27 @@ public class TransferTest extends BaseTest {
                 ResponseSpecs.requestReturnsBadRequest(expectedError))
                 .post(transferRequest);
 
+        List<Transaction> senderAccountTransactions = getAccountTransactions(user, senderAccount.getId());
+        softly.assertThat(senderAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_OUT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(receiverAccount.getId());
+                });
+
+        List<Transaction> receiverAccountTransactions = getAccountTransactions(user, receiverAccount.getId());
+        softly.assertThat(receiverAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_IN);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(senderAccount.getId());
+                });
     }
 
     @Test
@@ -139,6 +206,28 @@ public class TransferTest extends BaseTest {
                 Endpoint.TRANSFER,
                 ResponseSpecs.requestReturnsBadRequest(INVALID_TRANSFER.getValue()))
                 .post(transferRequest);
+
+        List<Transaction> senderAccountTransactions = getAccountTransactions(user, senderAccount.getId());
+        softly.assertThat(senderAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_OUT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(receiverAccount.getId());
+                });
+
+        List<Transaction> receiverAccountTransactions = getAccountTransactions(user, receiverAccount.getId());
+        softly.assertThat(receiverAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(amount);
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_IN);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(senderAccount.getId());
+                });
     }
 
     @Test
@@ -146,6 +235,7 @@ public class TransferTest extends BaseTest {
 
         List<UserRequest> users = createTwoDifferentUsers();
         UserRequest sender = users.get(0);
+        UserRequest receiver = users.get(1);
 
         List<AccountResponse> accounts = createTwoAccountsWithNonZeroBalanceForDifferentUsers(users);
         AccountResponse ownAccount = accounts.get(0);
@@ -158,6 +248,28 @@ public class TransferTest extends BaseTest {
                 Endpoint.TRANSFER,
                 ResponseSpecs.accountAccessForbidden())
                 .post(transferRequest);
+
+        List<Transaction> senderAccountTransactions = getAccountTransactions(receiver, accountOwnedByAnotherUser.getId());
+        softly.assertThat(senderAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(transferRequest.getAmount());
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_OUT);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(accountOwnedByAnotherUser.getId());
+                });
+
+        List<Transaction> receiverAccountTransactions = getAccountTransactions(sender, ownAccount.getId());
+        softly.assertThat(receiverAccountTransactions)
+                .noneSatisfy(transaction -> {
+                    assertThat(transaction.getAmount())
+                            .isEqualByComparingTo(transferRequest.getAmount());
+                    assertThat(TransactionType.valueOf(transaction.getType()))
+                            .isEqualTo(TransactionType.TRANSFER_IN);
+                    assertThat(transaction.getRelatedAccountId())
+                            .isEqualTo(ownAccount.getId());
+                });
     }
 
     @Test
@@ -171,6 +283,15 @@ public class TransferTest extends BaseTest {
                 Endpoint.TRANSFER,
                 ResponseSpecs.accountAccessForbidden())
                 .post(transferRequest);
+
+        Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
+        String paramName = endpoint.getPathParamNames().getFirst();
+
+        new CrudRequester(
+                RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
+                endpoint,
+                ResponseSpecs.accountAccessDenied())
+                .getByPathParams(Map.of(paramName, transferRequest.getSenderAccountId()));
     }
 
 }
