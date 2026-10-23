@@ -1,12 +1,12 @@
 package api.testdata;
 
-import models.DepositBalance;
+import api.models.DepositBalance;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-import static constants.messages.ValidationMessage.DEPOSIT_AMOUNT_EXCEEDS_LIMIT;
-import static constants.messages.ValidationMessage.DEPOSIT_AMOUNT_TOO_SMALL;
+import static api.constants.messages.ValidationMessage.DEPOSIT_AMOUNT_EXCEEDS_LIMIT;
+import static api.constants.messages.ValidationMessage.DEPOSIT_AMOUNT_TOO_SMALL;
 
 public class DepositValidationTestData {
 

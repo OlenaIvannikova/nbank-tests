@@ -1,13 +1,13 @@
 package api.testdata;
 
-import generators.RandomModelGenerator;
-import models.UserRole;
+import common.generators.RandomModelGenerator;
+import api.models.UserRole;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static constants.messages.ValidationMessage.*;
+import static api.constants.messages.ValidationMessage.*;
 
 public class UserValidationTestData {
 
@@ -18,7 +18,7 @@ public class UserValidationTestData {
     private static final String USERNAME_FIELD = "username";
 
     private static final String BLANK_USERNAME = " ";
-    private static final String SHORT_USERNAME = (String) RandomModelGenerator.generateFromRegex(
+    public static final String SHORT_USERNAME = (String) RandomModelGenerator.generateFromRegex(
             "[A-Za-z]{1,2}", String.class);
     private static final String LONG_USERNAME = (String) RandomModelGenerator.generateFromRegex(
             "[A-Za-z]{16,20}", String.class);

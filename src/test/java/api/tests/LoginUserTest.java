@@ -1,15 +1,16 @@
 package api.tests;
 
-import configs.Config;
-import models.*;
+import api.models.LoginUserRequest;
+import api.models.UserRequest;
+import common.configs.Config;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import requests.skeleton.Endpoint;
-import requests.skeleton.HttpHeaders;
-import requests.skeleton.requesters.CrudRequester;
-import requests.steps.AdminSteps;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.requests.skeleton.Endpoint;
+import api.requests.skeleton.HttpHeaders;
+import api.requests.skeleton.requesters.CrudRequester;
+import api.requests.steps.AdminSteps;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import base.BaseTest;
 

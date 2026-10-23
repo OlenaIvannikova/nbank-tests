@@ -1,20 +1,19 @@
 package api.tests;
 
-import models.AccountResponse;
-import models.UserRequest;
+import api.models.AccountResponse;
+import api.models.UserRequest;
 import org.junit.jupiter.api.Test;
-import requests.skeleton.Endpoint;
-import requests.skeleton.requesters.ValidatedCrudRequester;
-import requests.steps.AdminSteps;
-import specs.ResponseSpecs;
+import api.requests.skeleton.Endpoint;
+import api.requests.skeleton.requesters.ValidatedCrudRequester;
+import api.requests.steps.AdminSteps;
+import api.requests.steps.UserSteps;
+import api.specs.ResponseSpecs;
 
 import base.BaseTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static requests.steps.UserSteps.getAccounts;
-
 
 public class CreateAccountTest extends BaseTest {
 
@@ -32,7 +31,7 @@ public class CreateAccountTest extends BaseTest {
         ).post();
 
         // запросить все аккаунты пользователя и проверить, что наш аккаунт там
-        List<AccountResponse> userAccounts = getAccounts(user);
+        List<AccountResponse> userAccounts = new UserSteps(user.getUsername(), user.getPassword()).getAccounts();
 
         assertThat(userAccounts)
                 .extracting(AccountResponse::getId)

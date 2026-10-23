@@ -1,30 +1,30 @@
 package api.tests;
 
-import generators.RandomModelGenerator;
-import models.UserRequest;
-import models.UserResponse;
-import models.comparison.ModelAssertions;
+import common.generators.RandomModelGenerator;
+import api.models.UserRequest;
+import api.models.UserResponse;
+import api.models.comparison.ModelAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import requests.skeleton.Endpoint;
-import requests.skeleton.requesters.CrudRequester;
-import requests.skeleton.requesters.ValidatedCrudRequester;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
+import api.requests.skeleton.Endpoint;
+import api.requests.skeleton.requesters.CrudRequester;
+import api.requests.skeleton.requesters.ValidatedCrudRequester;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 import base.BaseTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static requests.steps.AdminSteps.getAllUsers;
+import static api.requests.steps.AdminSteps.getAllUsers;
 
 
 public class CreateUserTest extends BaseTest {
 
     @Test
-    public void adminCanCreateUserWithCorrectData() {
+    public void adminCanCreateUserWithCorrectDataTest() {
 
         UserRequest userRequest = RandomModelGenerator.generate(UserRequest.class);
 
@@ -45,7 +45,7 @@ public class CreateUserTest extends BaseTest {
 
     @ParameterizedTest
     @MethodSource("api.testdata.UserValidationTestData#invalidUsers")
-    public void adminCannotCreateUserWithInvalidData(String username, String password, String role, String expectedErrorKey, List<String> expectedErrors) {
+    public void adminCannotCreateUserWithInvalidDataTest(String username, String password, String role, String expectedErrorKey, List<String> expectedErrors) {
 
         UserRequest userRequest = UserRequest.builder()
                 .username(username)

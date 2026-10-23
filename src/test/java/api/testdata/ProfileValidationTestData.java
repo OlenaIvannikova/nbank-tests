@@ -1,16 +1,16 @@
 package api.testdata;
 
-import generators.RandomModelGenerator;
+import common.generators.RandomModelGenerator;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-import static constants.messages.ValidationMessage.*;
+import static api.constants.messages.ValidationMessage.NAME_MUST_CONTAIN_TWO_WORDS_SEPARATED_BY_SPACE;
 
 public class ProfileValidationTestData {
 
     private static final String BLANK_NAME = " ";
-    private static final String ONE_WORD_NAME =
+    public static final String ONE_WORD_NAME =
             (String) RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class);
 
     private static final String THREE_WORDS_NAME =

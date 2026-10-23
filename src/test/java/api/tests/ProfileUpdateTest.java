@@ -1,19 +1,21 @@
 package api.tests;
 
+import api.models.ProfileRequest;
+import api.models.ProfileResponse;
+import api.models.UserRequest;
 import base.BaseTest;
-import constants.messages.SuccessMessage;
-import generators.RandomModelGenerator;
-import models.*;
+import api.constants.messages.SuccessMessage;
+import common.generators.RandomModelGenerator;
+import api.models.comparison.ModelAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import requests.skeleton.Endpoint;
-import requests.skeleton.requesters.CrudRequester;
-import requests.steps.AdminSteps;
-import specs.RequestSpecs;
-import specs.ResponseSpecs;
-
-import static requests.steps.ProfileSteps.getProfile;
+import api.requests.skeleton.Endpoint;
+import api.requests.skeleton.requesters.CrudRequester;
+import api.requests.steps.AdminSteps;
+import api.requests.steps.UserSteps;
+import api.specs.RequestSpecs;
+import api.specs.ResponseSpecs;
 
 public class ProfileUpdateTest extends BaseTest {
 
@@ -21,6 +23,7 @@ public class ProfileUpdateTest extends BaseTest {
     public void userCanUpdateProfileTest() {
         // create user
         UserRequest user = AdminSteps.createUser();
+        UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
         ProfileRequest profileRequest = RandomModelGenerator.generate(ProfileRequest.class);
 
@@ -32,10 +35,12 @@ public class ProfileUpdateTest extends BaseTest {
                 .extract()
                 .as(ProfileResponse.class);
 
+        ModelAssertions.assertThatModels(profileRequest, profileResponse.getCustomer()).match();
+
         softly.assertThat(profileResponse.getMessage())
                 .isEqualTo(SuccessMessage.PROFILE_UPDATED.getValue());
 
-        softly.assertThat(getProfile(user).getName())
+        softly.assertThat(userSteps.getProfile().getName())
                 .as("name")
                 .isEqualTo(profileRequest.getName());
     }
@@ -44,10 +49,10 @@ public class ProfileUpdateTest extends BaseTest {
     @MethodSource("api.testdata.ProfileValidationTestData#invalidProfileNameField")
     public void userCannotUpdateProfileWithInvalidNameFieldTest(String name, String expectedErrorMessage) {
         UserRequest user = AdminSteps.createUser();
+        UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-        ProfileRequest profileRequest = ProfileRequest.builder()
-                .name(name)
-                .build();
+        ProfileRequest profileRequest = RandomModelGenerator.generate(ProfileRequest.class);
+        profileRequest.setName(name);
 
         new CrudRequester(
                 RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
@@ -55,7 +60,7 @@ public class ProfileUpdateTest extends BaseTest {
                 ResponseSpecs.requestReturnsBadRequest(expectedErrorMessage))
                 .update(profileRequest);
 
-        softly.assertThat(getProfile(user).getName())
+        softly.assertThat(userSteps.getProfile().getName())
                 .as("name")
                 .isNull();
     }

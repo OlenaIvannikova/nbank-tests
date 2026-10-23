@@ -1,11 +1,12 @@
 package api.testdata;
 
-import models.TransferAmount;
+import api.models.TransferAmount;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-import static constants.messages.ValidationMessage.*;
+import static api.constants.messages.ValidationMessage.TRANSFER_AMOUNT_EXCEEDS_LIMIT;
+import static api.constants.messages.ValidationMessage.TRANSFER_AMOUNT_TOO_SMALL;
 
 public class TransferValidationTestData {
     public static Stream<Arguments> validTransferAmount() {
