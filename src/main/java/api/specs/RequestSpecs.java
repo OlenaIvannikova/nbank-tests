@@ -1,6 +1,7 @@
 package api.specs;
 
 import common.configs.Config;
+import common.configs.Property;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -32,7 +33,7 @@ public class RequestSpecs {
                         new RequestLoggingFilter(),
                         new ResponseLoggingFilter()
                 ))
-                .setBaseUri(Config.getProperty("apiBaseUrl") + Config.getProperty("apiVersion"));
+                .setBaseUri(Config.getProperty(Property.API_BASE_URL) + Config.getProperty(Property.API_VERSION));
     }
 
     public static RequestSpecification unauthSpec() {
@@ -41,8 +42,8 @@ public class RequestSpecs {
 
     public static RequestSpecification adminSpec() {
         return authAsUser(
-                Config.getProperty("admin.username"),
-                Config.getProperty("admin.password"));
+                Config.getProperty(Property.ADMIN_LOGIN),
+                Config.getProperty(Property.ADMIN_PASSWORD));
     }
 
     public static RequestSpecification authAsUser(String username, String password) {
@@ -77,7 +78,5 @@ public class RequestSpecs {
                     return authHeader;
                 }
         );
-
     }
-
 }

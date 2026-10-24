@@ -4,6 +4,7 @@ import api.assertions.TransactionAssertions;
 import api.models.*;
 import base.BaseTest;
 import api.constants.messages.SuccessMessage;
+import common.generators.RandomModelGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,7 +18,6 @@ import java.util.List;
 
 import static api.constants.messages.ErrorMessage.INVALID_TRANSFER;
 import static common.generators.RandomData.generateTransferAmount;
-import static api.models.TransferRequest.createTransferRequest;
 import static api.requests.steps.AdminSteps.createTwoDifferentUsers;
 import static api.requests.steps.AdminSteps.createUser;
 
@@ -49,10 +49,11 @@ public class TransferTest extends BaseTest {
 
         // Выполнили перевод через Transfer API
         BigDecimal amount = generateTransferAmount(senderBalanceBefore);
-        TransferRequest transferRequest = createTransferRequest(
-                senderAccount,
-                receiverAccount,
-                amount);
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(senderAccount.getId());
+        transferRequest.setReceiverAccountId(receiverAccount.getId());
+        transferRequest.setAmount(amount);
+
         TransferResponse transferResponse = senderSteps
                 .transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
                 .as(TransferResponse.class);
@@ -106,8 +107,12 @@ public class TransferTest extends BaseTest {
 
         // Выполнили перевод через Transfer API
         BigDecimal amount = generateTransferAmount(senderBalanceBefore);
-        TransferRequest request = createTransferRequest(senderAccount, receiverAccount, amount);
-        TransferResponse transferResponse = userSteps.transferMoney(request, ResponseSpecs.requestReturnsOK())
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(senderAccount.getId());
+        transferRequest.setReceiverAccountId(receiverAccount.getId());
+        transferRequest.setAmount(amount);
+
+        TransferResponse transferResponse = userSteps.transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
                 .as(TransferResponse.class);
 
         //Проверили сообщение об успешном трансфере
@@ -142,7 +147,6 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 senderAccount.getId()
         );
-
     }
 
     @ParameterizedTest
@@ -159,7 +163,10 @@ public class TransferTest extends BaseTest {
         BigDecimal senderBalanceBefore = senderAccount.getBalance();
         BigDecimal receiverBalanceBefore = receiverAccount.getBalance();
 
-        TransferRequest transferRequest = createTransferRequest(senderAccount, receiverAccount, amount);
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(senderAccount.getId());
+        transferRequest.setReceiverAccountId(receiverAccount.getId());
+        transferRequest.setAmount(amount);
 
         userSteps.transferMoney(
                 transferRequest,
@@ -207,7 +214,10 @@ public class TransferTest extends BaseTest {
         BigDecimal receiverBalanceBefore = receiverAccount.getBalance();
 
         BigDecimal amount = generateTransferAmount(senderAccount.getBalance()).add(senderAccount.getBalance());
-        TransferRequest transferRequest = createTransferRequest(senderAccount, receiverAccount, amount);
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(senderAccount.getId());
+        transferRequest.setReceiverAccountId(receiverAccount.getId());
+        transferRequest.setAmount(amount);
 
         userSteps.transferMoney(
                 transferRequest,
@@ -260,13 +270,15 @@ public class TransferTest extends BaseTest {
         BigDecimal ownAccountBalanceBefore = ownAccount.getBalance();
         BigDecimal accountOwnedByAnotherUserBalanceBefore = accountOwnedByAnotherUser.getBalance();
 
-        TransferRequest transferRequest = createTransferRequest(accountOwnedByAnotherUser, ownAccount, generateTransferAmount(accountOwnedByAnotherUser.getBalance()));
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(accountOwnedByAnotherUser.getId());
+        transferRequest.setReceiverAccountId(ownAccount.getId());
+        transferRequest.setAmount(generateTransferAmount(accountOwnedByAnotherUser.getBalance()));
 
         senderSteps.transferMoney(
                 transferRequest,
                 ResponseSpecs.accountAccessForbidden()
         );
-
 
         BigDecimal ownAccountBalanceAfter = senderSteps.getAccountById(ownAccount.getId()).getBalance();
         BigDecimal accountOwnedByAnotherUserBalanceAfter = receiverSteps.getAccountById(accountOwnedByAnotherUser.getId()).getBalance();
@@ -275,7 +287,6 @@ public class TransferTest extends BaseTest {
                 .isEqualByComparingTo(ownAccountBalanceBefore);
         softly.assertThat(accountOwnedByAnotherUserBalanceAfter)
                 .isEqualByComparingTo(accountOwnedByAnotherUserBalanceBefore);
-
 
         List<Transaction> receiverAccountTransactions = receiverSteps.getAccountTransactions(accountOwnedByAnotherUser.getId());
         TransactionAssertions.assertTransactionDoesNotExist(
@@ -310,11 +321,10 @@ public class TransferTest extends BaseTest {
 
         Long nonExistentAccountId = Long.MAX_VALUE;
 
-        TransferRequest transferRequest = TransferRequest.builder()
-                .senderAccountId(nonExistentAccountId)
-                .receiverAccountId(receiverAccount.getId())
-                .amount(TransferAmount.MAX_ALLOWED.getAmount())
-                .build();
+        TransferRequest transferRequest = RandomModelGenerator.generate(TransferRequest.class);
+        transferRequest.setSenderAccountId(nonExistentAccountId);
+        transferRequest.setReceiverAccountId(receiverAccount.getId());
+        transferRequest.setAmount(TransferAmount.MAX_ALLOWED.getAmount());
 
         userSteps.transferMoney(
                 transferRequest,
@@ -335,5 +345,4 @@ public class TransferTest extends BaseTest {
                 nonExistentAccountId
         );
     }
-
 }

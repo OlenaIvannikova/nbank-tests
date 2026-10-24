@@ -64,5 +64,4 @@ public class CreateUserTest extends BaseUITest {
                 .extracting(UserResponse::getUsername)
                 .doesNotContain(newUser.getUsername());
     }
-
 }

@@ -3,6 +3,7 @@ package api.testdata;
 import common.generators.RandomModelGenerator;
 import org.junit.jupiter.params.provider.Arguments;
 
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static api.constants.messages.ValidationMessage.NAME_MUST_CONTAIN_TWO_WORDS_SEPARATED_BY_SPACE;
@@ -21,13 +22,17 @@ public class ProfileValidationTestData {
                     + RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class);
 
     private static final String NAME_WITH_DIGITS =
-            RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class)
-                    + "123 "
+            (String) RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class)
+                    + " "
+                    + RandomModelGenerator.generateFromRegex("[0-9]{1,5}", String.class)
                     + RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class);
 
+    private static final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+";
+
     private static final String NAME_WITH_SPECIAL_CHAR =
-            RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class)
-                    + "@"
+            (String) RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class)
+                    + " "
+                    + SPECIAL_CHARACTERS.charAt(new Random().nextInt(SPECIAL_CHARACTERS.length()))
                     + RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class);
 
     private static final String NAME_WITH_DOUBLE_SPACE =
@@ -83,7 +88,6 @@ public class ProfileValidationTestData {
                         NAME_MUST_CONTAIN_TWO_WORDS_SEPARATED_BY_SPACE.getValue()
                 )
         );
-
     }
 }
 

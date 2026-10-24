@@ -131,5 +131,4 @@ public class UserSteps {
                 ResponseSpecs.requestReturnsOK())
                 .get();
     }
-
 }

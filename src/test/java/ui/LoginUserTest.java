@@ -35,7 +35,7 @@ public class LoginUserTest extends BaseUITest {
                 .getPage(UserDashboardPage.class)
                 .getWelcomeText()
                 .shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Welcome, noname!"));
+                .shouldHave(Condition.text(
+                        UserDashboardPage.WELCOME_PREFIX + UserDashboardPage.DEFAULT_NAME));
     }
-
 }

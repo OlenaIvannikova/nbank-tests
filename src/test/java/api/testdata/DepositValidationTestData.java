@@ -1,6 +1,7 @@
 package api.testdata;
 
 import api.models.DepositBalance;
+import common.generators.RandomData;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
@@ -16,7 +17,10 @@ public class DepositValidationTestData {
                         DepositBalance.MIN_ALLOWED.getBalance()
                 ),
                 Arguments.of(
-                        DepositBalance.ALLOWED.getBalance()
+                        RandomData.generateRandomDepositAmount()
+                ),
+                Arguments.of(
+                        DepositBalance.JUST_BELOW_MAXIMUM.getBalance()
                 ),
                 Arguments.of(
                         DepositBalance.MAX_ALLOWED.getBalance()

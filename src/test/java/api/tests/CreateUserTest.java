@@ -47,11 +47,10 @@ public class CreateUserTest extends BaseTest {
     @MethodSource("api.testdata.UserValidationTestData#invalidUsers")
     public void adminCannotCreateUserWithInvalidDataTest(String username, String password, String role, String expectedErrorKey, List<String> expectedErrors) {
 
-        UserRequest userRequest = UserRequest.builder()
-                .username(username)
-                .password(password)
-                .role(role)
-                .build();
+        UserRequest userRequest = RandomModelGenerator.generate(UserRequest.class);
+        userRequest.setUsername(username);
+        userRequest.setPassword(password);
+        userRequest.setRole(role);
 
         new CrudRequester(
                 RequestSpecs.adminSpec(),

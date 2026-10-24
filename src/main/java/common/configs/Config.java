@@ -24,4 +24,8 @@ public class Config {
     public static String getProperty(String key) {
         return INSTANCE.properties.getProperty(key);
     }
+
+    public static String getProperty(Property property) {
+        return getProperty(property.getKey());
+    }
 }

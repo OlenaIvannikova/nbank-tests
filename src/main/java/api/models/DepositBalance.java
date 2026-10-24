@@ -8,6 +8,7 @@ public enum DepositBalance {
     ZERO("0.00"),
     MIN_ALLOWED("0.01"),
     ALLOWED("100.00"),
+    JUST_BELOW_MAXIMUM("4999.99"),
     MAX_ALLOWED("5000.00"),
     ABOVE_MAXIMUM("5000.10");
 

@@ -56,7 +56,6 @@ public class ValidatedCrudRequester<M extends BaseModel> extends HttpRequest imp
         );
     }
 
-
     @Override
     public M post(BaseModel model) {
         var createdModel = (M) crudRequester.post(model)
@@ -94,7 +93,7 @@ public class ValidatedCrudRequester<M extends BaseModel> extends HttpRequest imp
 
     @Override
     public List<M> getAllByPathParams(Map<String, ?> pathParams) {
-        return ((ValidatableResponse) crudRequester.getAllByPathParams(pathParams))
+        return crudRequester.getAllByPathParams(pathParams)
                 .extract()
                 .jsonPath()
                 .getList("", getResponseModel());

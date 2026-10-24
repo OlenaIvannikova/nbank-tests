@@ -12,20 +12,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferRequest extends BaseModel {
+    
     private long senderAccountId;
     private long receiverAccountId;
     private BigDecimal amount;
-
-    public static TransferRequest createTransferRequest(
-            AccountResponse sender,
-            AccountResponse receiver,
-            BigDecimal amount) {
-
-        return TransferRequest.builder()
-                .senderAccountId(sender.getId())
-                .receiverAccountId(receiver.getId())
-                .amount(amount)
-                .build();
-    }
-
 }

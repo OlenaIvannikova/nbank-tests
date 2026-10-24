@@ -1,6 +1,7 @@
 package api.models;
 
 import common.configs.Config;
+import common.configs.Property;
 import common.generators.GeneratingRule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +23,8 @@ public class UserRequest extends BaseModel {
 
     public static UserRequest getAdmin() {
         return UserRequest.builder()
-                .username(Config.getProperty("admin.username"))
-                .password(Config.getProperty("admin.password"))
+                .username(Config.getProperty(Property.ADMIN_LOGIN))
+                .password(Config.getProperty(Property.ADMIN_PASSWORD))
                 .build();
     }
 }

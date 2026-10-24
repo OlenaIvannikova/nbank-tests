@@ -3,6 +3,8 @@ package api.tests;
 import api.models.LoginUserRequest;
 import api.models.UserRequest;
 import common.configs.Config;
+import common.configs.Property;
+import common.generators.RandomModelGenerator;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import api.requests.skeleton.Endpoint;
@@ -21,8 +23,8 @@ public class LoginUserTest extends BaseTest {
     public void adminCanGenerateAuthTokenTest() {
 
         LoginUserRequest loginUserRequest = LoginUserRequest.builder()
-                .username(Config.getProperty("admin.username"))
-                .password(Config.getProperty("admin.password"))
+                .username(Config.getProperty(Property.ADMIN_LOGIN))
+                .password(Config.getProperty(Property.ADMIN_PASSWORD))
                 .build();
 
         new CrudRequester(
@@ -37,13 +39,16 @@ public class LoginUserTest extends BaseTest {
 
         // create user
         UserRequest userRequest = AdminSteps.createUser();
+        LoginUserRequest loginUserRequest = RandomModelGenerator.generate(LoginUserRequest.class);
+        loginUserRequest.setUsername(userRequest.getUsername());
+        loginUserRequest.setPassword(userRequest.getPassword());
 
         // user generates auth token
         new CrudRequester(
                 RequestSpecs.unauthSpec(),
                 Endpoint.LOGIN,
                 ResponseSpecs.requestReturnsOK())
-                .post(LoginUserRequest.builder().username(userRequest.getUsername()).password(userRequest.getPassword()).build())
+                .post(loginUserRequest)
                 .header(HttpHeaders.AUTHORIZATION, Matchers.notNullValue());
     }
 }

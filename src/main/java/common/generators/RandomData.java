@@ -1,5 +1,7 @@
 package common.generators;
 
+import api.models.DepositBalance;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,5 +30,14 @@ public class RandomData {
         return BigDecimal.valueOf(cents, 2);
     }
 
+    public static BigDecimal generateRandomDepositAmount() {
+        long maxCents = DepositBalance.MAX_ALLOWED.getBalance()
+                .movePointRight(2)
+                .longValueExact();
 
+        long cents = ThreadLocalRandom.current()
+                .nextLong(1, maxCents + 1);
+
+        return BigDecimal.valueOf(cents, 2);
+    }
 }

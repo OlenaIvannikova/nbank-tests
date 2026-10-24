@@ -15,6 +15,9 @@ public class TransferValidationTestData {
                         TransferAmount.MIN_ALLOWED.getAmount()
                 ),
                 Arguments.of(
+                        TransferAmount.JUST_BELOW_MAXIMUM.getAmount()
+                ),
+                Arguments.of(
                         TransferAmount.MAX_ALLOWED.getAmount()
                 )
         );

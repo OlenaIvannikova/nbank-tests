@@ -55,7 +55,6 @@ public class CrudRequester extends HttpRequest implements CrudEndpointInterface,
                 .spec(responseSpecification);
     }
 
-
     @Override
     public ValidatableResponse getAllByPathParams(Map<String, ?> pathParams) {
         String url = endpoint.getUrl();
@@ -70,7 +69,6 @@ public class CrudRequester extends HttpRequest implements CrudEndpointInterface,
                 .assertThat()
                 .spec(responseSpecification);
     }
-
 
     @Override
     public ValidatableResponse update(Long id, BaseModel model) {

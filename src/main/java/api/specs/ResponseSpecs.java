@@ -61,5 +61,4 @@ public class ResponseSpecs {
                         ErrorMessage.ACCOUNT_ACCESS_FORBIDDEN.getValue()))
                 .build();
     }
-
 }

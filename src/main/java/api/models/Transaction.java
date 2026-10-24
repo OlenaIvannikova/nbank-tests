@@ -18,5 +18,4 @@ public class Transaction extends BaseModel {
     private String type;
     private String timestamp;
     private long relatedAccountId;
-
 }

@@ -11,5 +11,4 @@ public @interface UserSession {
 
     int value() default 1; // сколько пользователей хотим создать
     int auth() default 1; // номер пользователя, каким хотим авторизоваться
-
 }

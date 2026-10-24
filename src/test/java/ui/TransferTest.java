@@ -114,5 +114,4 @@ public class TransferTest extends BaseUITest {
         softly.assertThat(senderBalanceAfter)
                 .isEqualByComparingTo(senderBalanceBefore);
     }
-
 }

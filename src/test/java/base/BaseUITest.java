@@ -2,6 +2,7 @@ package base;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import common.configs.Property;
 import common.extensions.AdminSessionExtension;
 import common.extensions.BrowserMatchExtension;
 import common.extensions.UserSessionExtension;
@@ -17,10 +18,10 @@ public class BaseUITest extends BaseTest {
 
     @BeforeAll
     public static void setUpSelenoid() {
-        Configuration.remote = Config.getProperty("uiRemote");
-        Configuration.baseUrl = Config.getProperty("uiBaseUrl");
-        Configuration.browser = Config.getProperty("browser");
-        Configuration.browserSize = Config.getProperty("browserSize");
+        Configuration.remote = Config.getProperty(Property.UI_REMOTE);
+        Configuration.baseUrl = Config.getProperty(Property.UI_BASE_URL);
+        Configuration.browser = Config.getProperty(Property.BROWSER);
+        Configuration.browserSize = Config.getProperty(Property.BROWSER_SIZE);
         Configuration.browserCapabilities
                 .setCapability(
                         "selenoid:options",
@@ -36,5 +37,4 @@ public class BaseUITest extends BaseTest {
     public void closeWebDriver() {
         Selenide.closeWebDriver();
     }
-
 }

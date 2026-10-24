@@ -79,6 +79,4 @@ public class TestDataStorage {
             throw new IllegalStateException("Cannot get id of entity", e);
         }
     }
-
-
 }

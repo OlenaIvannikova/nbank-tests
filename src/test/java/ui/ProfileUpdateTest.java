@@ -48,5 +48,4 @@ public class ProfileUpdateTest extends BaseUITest {
                 .as("name")
                 .isNull();
     }
-
 }
