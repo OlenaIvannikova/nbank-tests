@@ -2,6 +2,7 @@ package ui.pages;
 
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
+import common.utils.RetryUtils;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,10 +17,17 @@ public class ProfilePage extends BasePage<ProfilePage> {
     }
 
     public ProfilePage editProfile(String newUsername) {
-        newUsernameInput.clear();
-        newUsernameInput.sendKeys(newUsername);
+        RetryUtils.retry(
+                () -> {
+                    newUsernameInput.clear();
+                    newUsernameInput.setValue(newUsername);
+                    return newUsernameInput.getValue();
+                },
+                newUsername::equals,
+                5,
+                2000
+        );
         saveChangesButton.click();
         return this;
     }
-
 }

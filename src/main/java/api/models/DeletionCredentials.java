@@ -1,5 +1,7 @@
 package api.models;
 
+import common.configs.Config;
+import common.configs.Property;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +15,12 @@ public class DeletionCredentials {
 
     String username;
     String password;
+
+    public static DeletionCredentials admin() {
+        return new DeletionCredentials(
+                Config.getProperty(Property.ADMIN_LOGIN),
+                Config.getProperty(Property.ADMIN_PASSWORD)
+        );
+    }
 }
 

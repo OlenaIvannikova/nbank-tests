@@ -1,8 +1,6 @@
 package ui.pages;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selectors;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import common.utils.RetryUtils;
 import lombok.Getter;
 import ui.elements.UserBage;
@@ -16,7 +14,7 @@ public class AdminPanelPage extends BasePage<AdminPanelPage> {
 
     private SelenideElement adminPanelText = $(Selectors.byText("Admin Panel"));
     private SelenideElement addUserButton = $(Selectors.byText("Add User"));
-
+    private final SelenideElement allUsersHeading = $(Selectors.byText("All Users"));
 
     @Override
     public String url() {
@@ -31,7 +29,7 @@ public class AdminPanelPage extends BasePage<AdminPanelPage> {
     }
 
     public List<UserBage> getAllUsers() {
-        ElementsCollection elementsCollection =  $(Selectors.byText("All Users")).parent().findAll("li");
+        ElementsCollection elementsCollection = allUsersHeading.parent().findAll("li");
         return generatePageElements(elementsCollection, UserBage::new);
     }
 

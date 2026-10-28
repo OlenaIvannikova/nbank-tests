@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,5 +49,22 @@ public enum Endpoint {
         }
 
         return paramNames;
+    }
+
+    /*
+     Endpoint должен явно определять,
+     создаёт ли он удаляемую сущность и каким endpoint она удаляется
+     Т.к. POST /accounts/deposit и POST /accounts/transfer — это операции,
+     а не создание самостоятельных ресурсов,
+     которые можно удалить через DELETE на том же endpoint.
+     */
+    public Optional<Endpoint> getDeletionEndpoint() {
+        return switch (this) {
+            case ACCOUNT_CREATION -> Optional.of(ACCOUNT_DELETION);
+
+            case ADMIN_USER_CREATION -> Optional.of(ADMIN_USER_DELETION);
+
+            default -> Optional.empty();
+        };
     }
 }

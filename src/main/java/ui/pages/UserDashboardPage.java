@@ -3,6 +3,8 @@ package ui.pages;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,7 +18,6 @@ public class UserDashboardPage extends BasePage<UserDashboardPage> {
     private SelenideElement createNewAccountButton = $(Selectors.byText("➕ Create New Account"));
     private SelenideElement depositMoneyButton = $(Selectors.byText("\uD83D\uDCB0 Deposit Money"));
 
-
     @Override
     public String url() {
         return "/dashboard";
@@ -25,6 +26,13 @@ public class UserDashboardPage extends BasePage<UserDashboardPage> {
     public UserDashboardPage createNewAccount() {
         createNewAccountButton.click();
         return this;
+    }
+
+    public String checkAlertMessageAndAccept() {
+        Alert alert = getWait().until(ExpectedConditions.alertIsPresent());
+        String alertText = alert.getText();
+        alert.accept();
+        return alertText;
     }
 
     public DepositMoneyPage clickDepositMoneyButton() {

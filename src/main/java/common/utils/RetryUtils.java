@@ -18,24 +18,37 @@ public class RetryUtils {
             int maxAttempts,
             long delayMillis) {
 
-        T result = null;
-        int attempts = 0;
+        if (maxAttempts < 1) {
+            throw new IllegalArgumentException(
+                    "maxAttempts must be at least 1");
+        }
 
-        while (attempts < maxAttempts) {
-            attempts++;
-            result = action.get();
+        RuntimeException lastException = null;
 
-            if (condition.test(result)) {
-                return result;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                T result = action.get();
+
+                if (condition.test(result)) {
+                    return result;
+                }
+            } catch (RuntimeException e) {
+                lastException = e;
             }
 
-            try {
-                Thread.sleep(delayMillis);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if (attempt < maxAttempts) {
+                try {
+                    Thread.sleep(delayMillis);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(
+                            "Retry interrupted", e);
+                }
             }
         }
 
-        throw new RuntimeException("Retry failed after " + maxAttempts + " attempts!");
+        throw new RuntimeException(
+                "Retry failed after " + maxAttempts + " attempts",
+                lastException);
     }
 }

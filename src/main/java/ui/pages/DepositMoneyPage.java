@@ -2,6 +2,7 @@ package ui.pages;
 
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
+import common.utils.RetryUtils;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -14,7 +15,16 @@ public class DepositMoneyPage extends BasePage<DepositMoneyPage> {
     }
 
     public DepositMoneyPage depositMoney(String accountNumber, String balance) {
-        selectAccountBox.selectOptionContainingText(accountNumber);
+        RetryUtils.retry(
+                () -> {
+                    selectAccountBox.selectOptionContainingText(accountNumber);
+                    return selectAccountBox.getSelectedOption().getText()
+                            .contains(accountNumber);
+                },
+                selected -> selected,
+                5,
+                500
+        );
         amountInput.clear();
         amountInput.sendKeys(balance);
         depositMoneyButton.click();
@@ -22,7 +32,16 @@ public class DepositMoneyPage extends BasePage<DepositMoneyPage> {
     }
 
     public DepositMoneyPage depositMoneyWithoutAmount(String accountNumber) {
-        selectAccountBox.selectOptionContainingText(accountNumber);
+        RetryUtils.retry(
+                () -> {
+                    selectAccountBox.selectOptionContainingText(accountNumber);
+                    return selectAccountBox.getSelectedOption().getText()
+                            .contains(accountNumber);
+                },
+                selected -> selected,
+                5,
+                500
+        );
         amountInput.clear();
         depositMoneyButton.click();
         return this;
@@ -33,5 +52,4 @@ public class DepositMoneyPage extends BasePage<DepositMoneyPage> {
         depositMoneyButton.click();
         return this;
     }
-
 }

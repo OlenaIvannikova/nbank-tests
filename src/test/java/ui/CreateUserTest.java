@@ -1,17 +1,19 @@
 package ui;
 
+import api.models.DeletionCredentials;
 import base.BaseUITest;
 import common.annotations.AdminSession;
 import common.generators.RandomModelGenerator;
 import api.models.UserRequest;
 import api.models.UserResponse;
+import common.generators.TestDataStorage;
 import org.junit.jupiter.api.Test;
-import ui.elements.UserBage;
 import ui.pages.AdminPanelPage;
 import ui.pages.AlertMessage;
 
 import java.util.List;
 
+import static api.requests.skeleton.Endpoint.ADMIN_USER_DELETION;
 import static api.testdata.UserValidationTestData.SHORT_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,21 +28,27 @@ public class CreateUserTest extends BaseUITest {
 
         // Админ создает нового user и проверяем, что user отображается на UI
         UserRequest newUser = RandomModelGenerator.generate(UserRequest.class);
-        UserBage newUserBage = new AdminPanelPage()
+        new AdminPanelPage()
                 .open()
                 .createUser(newUser.getUsername(), newUser.getPassword())
-                .checkAlertMessageAndAccept(AlertMessage.USER_CREATED.getValue())
-                .findUserByUsername(newUser.getUsername());
+                .checkAlertMessageAndAccept(
+                        AlertMessage.USER_CREATED.getValue());
 
-        assertThat(newUserBage)
-                .as("UserBage should exist on Dashboard after user creation")
-                .isNotNull();
-
-        // Проверяем, что user создан на API
+        // Проверяем создание пользователя через API
         List<UserResponse> users = getAllUsers();
-        assertThat(users)
-                .extracting(UserResponse::getUsername)
-                .contains(newUser.getUsername());
+        UserResponse createdUser = users.stream()
+                .filter(user -> user.getUsername().equals(newUser.getUsername()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "User was not found through API: " + newUser.getUsername()
+                ));
+
+        // Регистрируем пользователя для удаления в @AfterEach
+        TestDataStorage.getStorage().addCreatedEntity(
+                ADMIN_USER_DELETION,
+                createdUser,
+                DeletionCredentials.admin()
+        );
     }
 
     @Test

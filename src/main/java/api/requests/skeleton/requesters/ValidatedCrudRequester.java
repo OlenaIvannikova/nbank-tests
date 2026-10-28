@@ -62,8 +62,13 @@ public class ValidatedCrudRequester<M extends BaseModel> extends HttpRequest imp
                 .extract()
                 .as(endpoint.getResponseModel());
 
-        TestDataStorage.getStorage()
-                .addCreatedEntity(endpoint, createdModel, deletionCredentials);
+        endpoint.getDeletionEndpoint().ifPresent(deletionEndpoint ->
+                TestDataStorage.getStorage().addCreatedEntity(
+                        deletionEndpoint,
+                        createdModel,
+                        deletionCredentials
+                )
+        );
 
         return createdModel;
     }

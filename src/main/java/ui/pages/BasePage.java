@@ -1,14 +1,16 @@
 package ui.pages;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selectors;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import api.models.UserRequest;
+import common.configs.Config;
+import common.configs.Property;
 import org.openqa.selenium.Alert;
 import api.specs.RequestSpecs;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ui.elements.BaseElement;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 
@@ -33,11 +35,18 @@ public abstract class BasePage<T extends BasePage> {
         return Selenide.page(pageClass);
     }
 
-    public T checkAlertMessageAndAccept(String alertMessage){
-        Alert alert = switchTo().alert();
+    public T checkAlertMessageAndAccept(String alertMessage) {
+        Alert alert = getWait().until(ExpectedConditions.alertIsPresent());
         assertThat(alert.getText()).contains(alertMessage);
         alert.accept();
         return (T) this;
+    }
+
+    protected WebDriverWait getWait() {
+        return new WebDriverWait(
+                WebDriverRunner.getWebDriver(),
+                Duration.ofSeconds(Long.valueOf(Config.getProperty(Property.EXPLICIT_WAIT_SECONDS)))
+        );
     }
 
     public static void authAsUser(String username, String password) {
@@ -59,5 +68,4 @@ public abstract class BasePage<T extends BasePage> {
                 .map(constructor)// Превращает каждый Selenide-элементов в BaseElement объект Java
                 .toList();
     }
-
 }

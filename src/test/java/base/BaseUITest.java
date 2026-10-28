@@ -22,13 +22,15 @@ public class BaseUITest extends BaseTest {
         Configuration.baseUrl = Config.getProperty(Property.UI_BASE_URL);
         Configuration.browser = Config.getProperty(Property.BROWSER);
         Configuration.browserSize = Config.getProperty(Property.BROWSER_SIZE);
+        // запуск тестов в фоновом (headless) режиме
+        Configuration.headless = true;
         Configuration.browserCapabilities
                 .setCapability(
                         "selenoid:options",
                         Map.of(
                                 "enableVNC", true, //Разрешить подключение к браузеру через VNC -> позволяет видеть браузер в режиме реального времени
                                 "enableLog", true, // Сохранять лог браузерной сессии
-                                "enableVideo", true
+                                "enableVideo", false
                         )
                 );
     }

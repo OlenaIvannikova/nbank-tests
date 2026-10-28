@@ -1,6 +1,7 @@
 package common.generators;
 
 import api.models.BaseModel;
+import api.models.CreatedEntity;
 import api.models.DeletionCredentials;
 import api.requests.skeleton.Endpoint;
 import api.requests.skeleton.requesters.CrudRequester;
@@ -8,21 +9,21 @@ import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class TestDataStorage {
 
-    private static TestDataStorage testDataStorage;
-    private final EnumMap<Endpoint, Map<Long, DeletionCredentials>>
-            createdEntitiesMap = new EnumMap<>(Endpoint.class);
+    private static final ThreadLocal<TestDataStorage> INSTANCE =
+            ThreadLocal.withInitial(TestDataStorage::new);
+
+    private final ConcurrentLinkedDeque<CreatedEntity> createdEntities =
+            new ConcurrentLinkedDeque<>();
 
     private TestDataStorage() {
     }
 
     public static TestDataStorage getStorage() {
-        if (testDataStorage == null) {
-            testDataStorage = new TestDataStorage();
-        }
-        return testDataStorage;
+        return INSTANCE.get();
     }
 
     public void addCreatedEntity(
@@ -30,53 +31,73 @@ public class TestDataStorage {
             BaseModel model,
             DeletionCredentials credentials
     ) {
-        addCreatedEntity(endpoint, getEntityId(model), credentials);
-    }
+        Long id = getEntityId(model);
 
-    private void addCreatedEntity(
-            Endpoint endpoint,
-            Long id,
-            DeletionCredentials credentials
-    ) {
-        if (id != null) {
-            createdEntitiesMap
-                    .computeIfAbsent(endpoint, key -> new HashMap<>())
-                    .put(id, credentials);
+        if (id == null) {
+            return;
         }
+
+        DeletionCredentials deletionCredentials = credentials != null
+                ? credentials
+                : DeletionCredentials.admin();
+
+        createdEntities.addLast(
+                new CreatedEntity(
+                        endpoint,
+                        id,
+                        deletionCredentials
+                )
+        );
     }
 
     public void deleteCreatedEntities() {
-        createdEntitiesMap.forEach((endpoint, entities) ->
-                entities.forEach((id, credentials) -> {
-                    var requestSpec = credentials == null
-                            ? RequestSpecs.adminSpec()
-                            : RequestSpecs.authAsUser(
-                            credentials.getUsername(),
-                            credentials.getPassword()
+        try {
+            List<CreatedEntity> snapshot =
+                    new ArrayList<>(createdEntities);
+
+            Collections.reverse(snapshot);
+
+            for (CreatedEntity entity : snapshot) {
+                try {
+                    var requestSpec = RequestSpecs.authAsUser(
+                            entity.getCredentials().getUsername(),
+                            entity.getCredentials().getPassword()
                     );
 
                     new CrudRequester(
                             requestSpec,
-                            endpoint,
+                            entity.getEndpoint(),
                             ResponseSpecs.requestReturnsOK()
-                    ).delete(id);
-                })
-        );
+                    ).delete(entity.getId());
 
-        createdEntitiesMap.clear();
+                } catch (Exception e) {
+                }
+            }
+        } finally {
+            createdEntities.clear();
+            INSTANCE.remove();
+        }
     }
-
 
     private Long getEntityId(BaseModel model) {
         try {
             var idField = model.getClass().getDeclaredField("id");
             idField.setAccessible(true);
-            var idFieldValue = Long.valueOf(
-                    Objects.toString(idField.get(model)));
-            idField.setAccessible(false);
-            return idFieldValue;
+
+            try {
+                Object value = idField.get(model);
+
+                return value == null
+                        ? null
+                        : Long.valueOf(value.toString());
+
+            } finally {
+                idField.setAccessible(false);
+            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalStateException("Cannot get id of entity", e);
+            throw new IllegalStateException(
+                    "Cannot get id of entity", e
+            );
         }
     }
 }

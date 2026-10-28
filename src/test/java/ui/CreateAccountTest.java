@@ -1,14 +1,18 @@
 package ui;
 
+import api.requests.steps.UserSteps;
 import base.BaseUITest;
 import common.annotations.UserSession;
 import common.storage.SessionStorage;
 import api.models.AccountResponse;
+import common.utils.RetryUtils;
 import org.junit.jupiter.api.Test;
 import ui.pages.AlertMessage;
 import ui.pages.UserDashboardPage;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,17 +22,40 @@ public class CreateAccountTest extends BaseUITest {
     @UserSession
     public void userCanCreateAccountTest() {
 
-        new UserDashboardPage().open().createNewAccount();
+        UserSteps userSteps = SessionStorage.getSteps();
 
-        // Проверяем, что account создан на API
-        List<AccountResponse> userAccounts = SessionStorage.getSteps().getAccounts();
-        Long accountNumber = userAccounts.getFirst().getId();
-        assertThat(userAccounts)
-                .extracting(AccountResponse::getId)
-                .contains(Long.valueOf(accountNumber));
+        // Запоминаем ID аккаунтов до создания
+        Set<Long> existingAccountIds = userSteps.getAccounts().stream()
+                .map(AccountResponse::getId)
+                .collect(Collectors.toSet());
 
-        // Проверяем, что account создан на UI
-        new UserDashboardPage().checkAlertMessageAndAccept(AlertMessage.ACCOUNT_CREATED.getValue() + userAccounts.getFirst().getAccountNumber());
+        // Создаём аккаунт через UI
+        String alertText = new UserDashboardPage()
+                .open()
+                .createNewAccount()
+                .checkAlertMessageAndAccept();
 
+        // Ждём появления нового аккаунта в API
+        List<AccountResponse> userAccounts = RetryUtils.retry(
+                userSteps::getAccounts,
+                accounts -> accounts != null && accounts.stream()
+                        .anyMatch(a -> !existingAccountIds.contains(a.getId())),
+                5,
+                1000
+        );
+
+        // Получаем именно новый аккаунт через API
+        AccountResponse createdAccount = userAccounts.stream()
+                .filter(a -> !existingAccountIds.contains(a.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "New account was not found in API"
+                ));
+
+        // Проверяем, что новый аккаунт действительно появился в API
+        assertThat(createdAccount.getId()).isNotIn(existingAccountIds);
+
+        // Проверяем на UI
+        assertThat(alertText).isEqualTo(AlertMessage.ACCOUNT_CREATED.getValue() + createdAccount.getAccountNumber());
     }
 }

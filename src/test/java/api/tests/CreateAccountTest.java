@@ -2,6 +2,7 @@ package api.tests;
 
 import api.models.AccountResponse;
 import api.models.UserRequest;
+import common.utils.RetryUtils;
 import org.junit.jupiter.api.Test;
 import api.requests.skeleton.Endpoint;
 import api.requests.skeleton.requesters.ValidatedCrudRequester;
@@ -21,6 +22,7 @@ public class CreateAccountTest extends BaseTest {
     public void userCanCreateAccountTest() {
         // create user
         UserRequest user = AdminSteps.createUser();
+        UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
         // user creates account
         AccountResponse account = ValidatedCrudRequester.<AccountResponse>authenticatedAsUser(
@@ -31,8 +33,13 @@ public class CreateAccountTest extends BaseTest {
         ).post();
 
         // запросить все аккаунты пользователя и проверить, что наш аккаунт там
-        List<AccountResponse> userAccounts = new UserSteps(user.getUsername(), user.getPassword()).getAccounts();
-
+        List<AccountResponse> userAccounts = RetryUtils.retry(
+                userSteps::getAccounts,
+                accounts -> accounts != null && accounts.stream()
+                        .anyMatch(a -> a.getId().equals(account.getId())),
+                5,
+                1000
+        );
         assertThat(userAccounts)
                 .extracting(AccountResponse::getId)
                 .contains(account.getId());

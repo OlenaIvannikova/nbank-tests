@@ -5,6 +5,7 @@ import api.assertions.TransactionAssertions;
 import api.models.*;
 import base.BaseTest;
 import common.generators.RandomModelGenerator;
+import common.utils.RetryUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -66,8 +67,16 @@ public class DepositTest extends BaseTest {
         UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
         long nonExistentAccountId = Long.MAX_VALUE;
+
         // проверяем что такого аккаунта точно нет в системе
-        assertThat(userSteps.getAccounts())
+        List<AccountResponse> userAccounts = RetryUtils.retry(
+                userSteps::getAccounts,
+                accounts -> accounts != null && accounts.stream()
+                        .noneMatch(a -> a.getId().equals(nonExistentAccountId)),
+                5,
+                1000
+        );
+        assertThat(userAccounts)
                 .extracting(AccountResponse::getId)
                 .doesNotContain(nonExistentAccountId);
 

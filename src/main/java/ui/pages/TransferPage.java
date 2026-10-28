@@ -2,6 +2,7 @@ package ui.pages;
 
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
+import common.utils.RetryUtils;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,7 +17,16 @@ public class TransferPage extends BasePage<TransferPage> {
     }
 
     public TransferPage transferMoney(String senderAccountNumber, String recipientAccountNumber, String amount) {
-        selectAccountBox.selectOptionContainingText(senderAccountNumber);
+        RetryUtils.retry(
+                () -> {
+                    selectAccountBox.selectOptionContainingText(senderAccountNumber);
+                    return selectAccountBox.getSelectedOption().getText()
+                            .contains(senderAccountNumber);
+                },
+                selected -> selected,
+                5,
+                1000
+        );
         recipientAccountInput.sendKeys(recipientAccountNumber);
         amountInput.clear();
         amountInput.sendKeys(amount);
@@ -28,7 +38,16 @@ public class TransferPage extends BasePage<TransferPage> {
     }
 
     public TransferPage transferMoneyWithoutSelectedRecipientAccount(String senderAccountNumber, String amount) {
-        selectAccountBox.selectOptionContainingText(senderAccountNumber);
+        RetryUtils.retry(
+                () -> {
+                    selectAccountBox.selectOptionContainingText(senderAccountNumber);
+                    return selectAccountBox.getSelectedOption().getText()
+                            .contains(senderAccountNumber);
+                },
+                selected -> selected,
+                5,
+                2000
+        );
         recipientAccountInput.clear();
         amountInput.clear();
         amountInput.sendKeys(amount);

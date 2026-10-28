@@ -9,7 +9,8 @@ public enum Property {
     UI_REMOTE("uiRemote"),
     UI_BASE_URL("uiBaseUrl"),
     BROWSER("browser"),
-    BROWSER_SIZE("browserSize");
+    BROWSER_SIZE("browserSize"),
+    EXPLICIT_WAIT_SECONDS("explicitWaitSeconds");
 
     private final String key;
 

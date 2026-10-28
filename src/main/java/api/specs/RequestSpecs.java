@@ -12,15 +12,16 @@ import api.requests.skeleton.Endpoint;
 import api.requests.skeleton.HttpHeaders;
 import api.requests.skeleton.requesters.CrudRequester;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 // Готовые шаблоны для настройки запросов (RequestSpecification)
 public class RequestSpecs {
 
     // Для кеширования токенов
-    private static final Map<String, String> authHeaders = new HashMap<>();
+    private static final Map<String, String> authHeaders =
+            new ConcurrentHashMap<>();
 
     private RequestSpecs() {
     }

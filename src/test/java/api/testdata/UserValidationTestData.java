@@ -12,9 +12,11 @@ import static api.constants.messages.ValidationMessage.*;
 
 public class UserValidationTestData {
 
-    private static final String VALID_PASSWORD = (String) RandomModelGenerator.generateFromRegex(
-            "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,20}$",
-            String.class);
+    private static final String VALID_PASSWORD =
+            (String) RandomModelGenerator.generateFromRegex(
+                    "^[A-Z]{3}[a-z]{4}[0-9]{3}[$%&]{2}$",
+                    String.class
+            );
     private static final String USER_ROLE = UserRole.USER.name();
     private static final String EXPECTED_ERROR_KEY = "username";
     private static final String BLANK_USERNAME = " ";
@@ -22,7 +24,7 @@ public class UserValidationTestData {
             "[A-Za-z]{1,2}", String.class);
     private static final String LONG_USERNAME = (String) RandomModelGenerator.generateFromRegex(
             "[A-Za-z]{16,20}", String.class);
-    private static final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+";
+    private static final String SPECIAL_CHARACTERS = "!@#$%^&*()=+";
     private static final String USERNAME_WITH_SPECIAL_CHAR =
             (String) RandomModelGenerator.generateFromRegex("[A-Za-z]{3,10}", String.class)
                     + SPECIAL_CHARACTERS.charAt(new Random().nextInt(SPECIAL_CHARACTERS.length()));
