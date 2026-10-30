@@ -1,9 +1,12 @@
 package api.tests;
 
 import api.assertions.TransactionAssertions;
+import api.dao.comparison.DaoAndModelAssertions;
 import api.models.*;
+import api.requests.steps.DataBaseSteps;
 import base.BaseTest;
 import api.constants.messages.SuccessMessage;
+import common.annotations.APIVersion;
 import common.generators.RandomModelGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +24,7 @@ import static common.generators.RandomData.generateTransferAmount;
 import static api.requests.steps.AdminSteps.createTwoDifferentUsers;
 import static api.requests.steps.AdminSteps.createUser;
 
+@APIVersion("with_database")
 public class TransferTest extends BaseTest {
 
     @Test
@@ -62,8 +66,10 @@ public class TransferTest extends BaseTest {
         softly.assertThat(transferResponse.getMessage())
                 .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue());
 
-        BigDecimal senderBalanceAfter = senderSteps.getAccountById(senderAccount.getId()).getBalance();
-        BigDecimal receiverBalanceAfter = receiverSteps.getAccountById(receiverAccount.getId()).getBalance();
+        AccountResponse senderAccountAfterTransfer = senderSteps.getAccountById(senderAccount.getId());
+        AccountResponse receiverAccountAfterTransfer = receiverSteps.getAccountById(receiverAccount.getId());
+        BigDecimal senderBalanceAfter = senderAccountAfterTransfer.getBalance();
+        BigDecimal receiverBalanceAfter = receiverAccountAfterTransfer.getBalance();
 
         // Проверили, что баланс отправителя уменьшился ровно на сумму трансфера
         softly.assertThat(senderBalanceAfter.setScale(2, RoundingMode.HALF_UP))
@@ -89,6 +95,31 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 senderAccount.getId()
         );
+
+        // DB check
+        DaoAndModelAssertions.assertThat(senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId())).match();
+        DaoAndModelAssertions.assertThat(receiverAccountAfterTransfer, DataBaseSteps.getAccountById(receiverAccount.getId())).match();
+
+        Transaction transferOut = senderAccountTransactions
+                .stream()
+                .filter(transaction -> TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "TRANSFER_OUT transaction not found"
+                ));
+        DaoAndModelAssertions.assertThat(transferOut, DataBaseSteps
+                .getAccountTransactionsByTransactionType(
+                        senderAccount.getId(), TransactionType.TRANSFER_OUT).getFirst()).match();
+
+        Transaction transferIn = receiverAccountTransactions
+                .stream()
+                .filter(transaction -> TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "TRANSFER_IN transaction not found"
+                ));
+        DaoAndModelAssertions.assertThat(transferIn, DataBaseSteps.getAccountTransactionsByTransactionType(
+                receiverAccount.getId(), TransactionType.TRANSFER_IN).getFirst()).match();
     }
 
     @Test
@@ -119,8 +150,10 @@ public class TransferTest extends BaseTest {
         softly.assertThat(transferResponse.getMessage())
                 .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue());
 
-        BigDecimal senderBalanceAfter = userSteps.getAccountById(senderAccount.getId()).getBalance();
-        BigDecimal receiverBalanceAfter = userSteps.getAccountById(receiverAccount.getId()).getBalance();
+        AccountResponse senderAccountAfterTransfer = userSteps.getAccountById(senderAccount.getId());
+        AccountResponse receiverAccountAfterTransfer = userSteps.getAccountById(receiverAccount.getId());
+        BigDecimal senderBalanceAfter = senderAccountAfterTransfer.getBalance();
+        BigDecimal receiverBalanceAfter = receiverAccountAfterTransfer.getBalance();
 
         // Проверили, что баланс отправителя уменьшился ровно на сумму трансфера
         softly.assertThat(senderBalanceAfter.setScale(2, RoundingMode.HALF_UP))
@@ -147,6 +180,31 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 senderAccount.getId()
         );
+
+        // DB check
+        DaoAndModelAssertions.assertThat(senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId())).match();
+        DaoAndModelAssertions.assertThat(receiverAccountAfterTransfer, DataBaseSteps.getAccountById(receiverAccount.getId())).match();
+
+        Transaction transferOut = senderAccountTransactions
+                .stream()
+                .filter(transaction -> TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "TRANSFER_OUT transaction not found"
+                ));
+        DaoAndModelAssertions.assertThat(transferOut, DataBaseSteps
+                .getAccountTransactionsByTransactionType(
+                        senderAccount.getId(), TransactionType.TRANSFER_OUT).getFirst()).match();
+
+        Transaction transferIn = receiverAccountTransactions
+                .stream()
+                .filter(transaction -> TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "TRANSFER_IN transaction not found"
+                ));
+        DaoAndModelAssertions.assertThat(transferIn, DataBaseSteps.getAccountTransactionsByTransactionType(
+                receiverAccount.getId(), TransactionType.TRANSFER_IN).getFirst()).match();
     }
 
     @ParameterizedTest
@@ -198,6 +256,20 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 senderAccount.getId()
         );
+
+        // DB check
+        DaoAndModelAssertions.assertThat(senderAccount, DataBaseSteps.getAccountById(senderAccount.getId())).match();
+        DaoAndModelAssertions.assertThat(receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId())).match();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                senderAccount.getId(),
+                TransactionType.TRANSFER_OUT
+        )).isEmpty();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                receiverAccount.getId(),
+                TransactionType.TRANSFER_IN
+        )).isEmpty();
     }
 
     @Test
@@ -249,6 +321,20 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 senderAccount.getId()
         );
+
+        // DB check
+        DaoAndModelAssertions.assertThat(senderAccount, DataBaseSteps.getAccountById(senderAccount.getId())).match();
+        DaoAndModelAssertions.assertThat(receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId())).match();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                senderAccount.getId(),
+                TransactionType.TRANSFER_OUT
+        )).isEmpty();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                receiverAccount.getId(),
+                TransactionType.TRANSFER_IN
+        )).isEmpty();
     }
 
     @Test
@@ -305,6 +391,20 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 ownAccount.getId()
         );
+
+        // DB check
+        DaoAndModelAssertions.assertThat(ownAccount, DataBaseSteps.getAccountById(ownAccount.getId())).match();
+        DaoAndModelAssertions.assertThat(accountOwnedByAnotherUser, DataBaseSteps.getAccountById(accountOwnedByAnotherUser.getId())).match();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                ownAccount.getId(),
+                TransactionType.TRANSFER_OUT
+        )).isEmpty();
+
+        softly.assertThat(DataBaseSteps.getAccountTransactionsByTransactionType(
+                accountOwnedByAnotherUser.getId(),
+                TransactionType.TRANSFER_IN
+        )).isEmpty();
     }
 
     @Test
@@ -344,5 +444,12 @@ public class TransferTest extends BaseTest {
                 TransactionType.TRANSFER_IN,
                 nonExistentAccountId
         );
+
+        // DB check
+        softly.assertThat(DataBaseSteps.getAccountById(nonExistentAccountId)).isNull();
+        DaoAndModelAssertions.assertThat(receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId())).match();
+        softly.assertThat(DataBaseSteps.getAccountTransactions(
+                nonExistentAccountId
+        )).isEmpty();
     }
 }

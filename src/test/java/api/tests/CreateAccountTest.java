@@ -1,7 +1,11 @@
 package api.tests;
 
+import api.dao.AccountDao;
+import api.dao.comparison.DaoAndModelAssertions;
 import api.models.AccountResponse;
 import api.models.UserRequest;
+import api.requests.steps.DataBaseSteps;
+import common.annotations.APIVersion;
 import common.utils.RetryUtils;
 import org.junit.jupiter.api.Test;
 import api.requests.skeleton.Endpoint;
@@ -16,6 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@APIVersion("with_database")
 public class CreateAccountTest extends BaseTest {
 
     @Test
@@ -43,5 +48,8 @@ public class CreateAccountTest extends BaseTest {
         assertThat(userAccounts)
                 .extracting(AccountResponse::getId)
                 .contains(account.getId());
+
+        AccountDao accountDao = DataBaseSteps.getAccountByAccountNumber(account.getAccountNumber());
+        DaoAndModelAssertions.assertThat(account, accountDao).match();
     }
 }

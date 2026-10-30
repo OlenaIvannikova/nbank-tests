@@ -15,13 +15,13 @@ public enum ValidationMessage {
 
     // Deposit validation
     DEPOSIT_AMOUNT_TOO_SMALL(
-            "Deposit amount must be at least 0.01"
+            "Invalid account or amount"
     ),
-    DEPOSIT_AMOUNT_EXCEEDS_LIMIT("Deposit amount cannot exceed 5000"),
+    DEPOSIT_AMOUNT_EXCEEDS_LIMIT("Deposit amount exceeds the 5000 limit"),
 
     // Transfer validation
     TRANSFER_AMOUNT_EXCEEDS_LIMIT("Transfer amount cannot exceed 10000"),
-    TRANSFER_AMOUNT_TOO_SMALL("Transfer amount must be at least 0.01"),
+    TRANSFER_AMOUNT_TOO_SMALL("Invalid transfer: insufficient funds or invalid accounts"),
 
     // Profile validation
     NAME_MUST_CONTAIN_TWO_WORDS_SEPARATED_BY_SPACE(

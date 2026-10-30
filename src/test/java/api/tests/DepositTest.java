@@ -2,8 +2,12 @@ package api.tests;
 
 import api.assertions.AccountAssertions;
 import api.assertions.TransactionAssertions;
+import api.dao.TransactionDao;
+import api.dao.comparison.DaoAndModelAssertions;
 import api.models.*;
+import api.requests.steps.DataBaseSteps;
 import base.BaseTest;
+import common.annotations.APIVersion;
 import common.generators.RandomModelGenerator;
 import common.utils.RetryUtils;
 import org.junit.jupiter.api.Test;
@@ -23,6 +27,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static api.requests.steps.AdminSteps.createTwoDifferentUsers;
 
+@APIVersion("with_database")
 public class DepositTest extends BaseTest {
 
     @ParameterizedTest
@@ -31,18 +36,15 @@ public class DepositTest extends BaseTest {
 
         UserRequest user = AdminSteps.createUser();
         UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
-
         AccountResponse account = userSteps.createAccount();
 
         DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
         deposit.setId(account.getId());
         deposit.setBalance(balance);
-
         AccountResponse accountDetails = userSteps.depositMoney(
                 deposit,
                 ResponseSpecs.requestReturnsOK()
         ).as(AccountResponse.class);
-
         AccountAssertions.assertDepositSuccessful(
                 softly,
                 accountDetails,
@@ -59,6 +61,15 @@ public class DepositTest extends BaseTest {
                 TransactionType.DEPOSIT,
                 account.getId()
         );
+
+        TransactionDao depositTransactionDao = DataBaseSteps.getAccountTransactionsByTransactionType(
+                account.getId(),
+                TransactionType.DEPOSIT).getFirst();
+        DaoAndModelAssertions
+                .assertThat(deposit, depositTransactionDao)
+                .match();
+        assertThat(depositTransactionDao.getType())
+                .isEqualTo(TransactionType.DEPOSIT.toString());
     }
 
     @Test
@@ -91,6 +102,10 @@ public class DepositTest extends BaseTest {
                 endpoint,
                 ResponseSpecs.accountAccessDenied())
                 .getAllByPathParams(Map.of(paramName, nonExistentAccountId));
+
+        List<TransactionDao> transactions = DataBaseSteps.getAccountTransactions(
+                nonExistentAccountId);
+        assertThat(transactions).isEmpty();
     }
 
     @Test
@@ -124,6 +139,10 @@ public class DepositTest extends BaseTest {
                 userSteps2.getAccountTransactions(accountOwnedByAnotherUser.getId());
         softly.assertThat(transactionsAfter)
                 .containsExactlyElementsOf(transactionsBefore);
+
+        List<TransactionDao> transactions = DataBaseSteps.getAccountTransactions(
+                accountOwnedByAnotherUser.getId());
+        assertThat(transactions).isEmpty();
     }
 
     @ParameterizedTest
@@ -153,5 +172,9 @@ public class DepositTest extends BaseTest {
                 userSteps.getAccountTransactions(account.getId());
         softly.assertThat(transactionsAfter)
                 .containsExactlyElementsOf(transactionsBefore);
+
+        List<TransactionDao> transactions = DataBaseSteps.getAccountTransactions(
+                account.getId());
+        assertThat(transactions).isEmpty();
     }
 }

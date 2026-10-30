@@ -6,6 +6,7 @@ import api.models.DepositBalance;
 import api.models.Transaction;
 import api.models.TransactionType;
 import base.BaseUITest;
+import common.annotations.APIVersion;
 import common.annotations.UserSession;
 import common.storage.SessionStorage;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static ui.pages.AlertMessage.*;
 
+@APIVersion("with_database")
 public class DepositTest extends BaseUITest {
 
     @Test

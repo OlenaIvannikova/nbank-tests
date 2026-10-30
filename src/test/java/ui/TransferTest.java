@@ -1,6 +1,7 @@
 package ui;
 
 import base.BaseUITest;
+import common.annotations.APIVersion;
 import common.annotations.UserSession;
 import common.storage.SessionStorage;
 import api.models.AccountResponse;
@@ -15,6 +16,7 @@ import java.math.RoundingMode;
 import static common.generators.RandomData.generateTransferAmount;
 import static ui.pages.AlertMessage.*;
 
+@APIVersion("with_database")
 public class TransferTest extends BaseUITest {
 
     @Test

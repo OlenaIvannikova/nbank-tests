@@ -1,143 +1,128 @@
-2026-10-28 13:56:27.634 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: userCanCreateAccountTest() at 2026-10-28T11:56:27.632Z
-2026-10-28 13:56:27.634 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [3] GyipuAeZNoAqxSwdbAM, RVUbscs865%$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-28T11:56:27.633Z
-2026-10-28 13:56:29.053 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: adminCanCreateUserWithCorrectDataTest() at 2026-10-28T11:56:29.053Z
-2026-10-28 13:56:30.806 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: adminCanCreateUserWithCorrectDataTest() at 2026-10-28T11:56:30.806Z; duration=1753 ms
-2026-10-28 13:56:30.828 INFO  [ForkJoinPool-1-worker-1] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 36 - let's create a new webdriver
-2026-10-28 13:56:30.973 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: userCanCreateAccountTest() at 2026-10-28T11:56:30.973Z; duration=3341 ms
-2026-10-28 13:56:31.092 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: [1]  , RVUbscs865%$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-28T11:56:31.092Z
-2026-10-28 13:56:31.498 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [3] GyipuAeZNoAqxSwdbAM, RVUbscs865%$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-28T11:56:31.498Z; duration=3865 ms
-2026-10-28 13:56:31.501 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-28T11:56:31.501Z
-2026-10-28 13:56:31.503 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [4] fhXWn+, RVUbscs865%$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-28T11:56:31.503Z
-2026-10-28 13:56:31.697 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: [1]  , RVUbscs865%$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-28T11:56:31.697Z; duration=605 ms
-2026-10-28 13:56:31.702 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: [2] cc, RVUbscs865%$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-28T11:56:31.702Z
-2026-10-28 13:56:32.190 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: [2] cc, RVUbscs865%$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-28T11:56:32.190Z; duration=488 ms
-2026-10-28 13:56:32.198 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: adminCanGenerateAuthTokenTest() at 2026-10-28T11:56:32.198Z
-2026-10-28 13:56:32.279 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [4] fhXWn+, RVUbscs865%$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-28T11:56:32.279Z; duration=776 ms
-2026-10-28 13:56:32.301 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [3] qOjh Vlw BSCx, Name must contain two words with letters only at 2026-10-28T11:56:32.301Z
-2026-10-28 13:56:32.466 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: adminCanGenerateAuthTokenTest() at 2026-10-28T11:56:32.466Z; duration=268 ms
-2026-10-28 13:56:32.470 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: userCanGenerateAuthTokenTest() at 2026-10-28T11:56:32.470Z
-2026-10-28 13:56:33.478 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: userCanGenerateAuthTokenTest() at 2026-10-28T11:56:33.478Z; duration=1008 ms
-2026-10-28 13:56:33.729 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-28T11:56:33.729Z
-2026-10-28 13:56:35.064 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [3] qOjh Vlw BSCx, Name must contain two words with letters only at 2026-10-28T11:56:35.064Z; duration=2763 ms
-2026-10-28 13:56:35.381 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [4] NzTvHdNUHW 0731voFYeyYQfc, Name must contain two words with letters only at 2026-10-28T11:56:35.381Z
-2026-10-28 13:56:35.948 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-28T11:56:35.948Z; duration=4447 ms
-2026-10-28 13:56:36.515 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [4] NzTvHdNUHW 0731voFYeyYQfc, Name must contain two words with letters only at 2026-10-28T11:56:36.515Z; duration=1134 ms
-2026-10-28 13:56:36.553 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-28T11:56:36.553Z
-2026-10-28 13:56:36.742 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [5] nBpTIVsG +OHVmhrKAvR, Name must contain two words with letters only at 2026-10-28T11:56:36.742Z
-2026-10-28 13:56:38.052 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-28T11:56:38.052Z; duration=4323 ms
-2026-10-28 13:56:38.065 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [5] nBpTIVsG +OHVmhrKAvR, Name must contain two words with letters only at 2026-10-28T11:56:38.065Z; duration=1323 ms
-2026-10-28 13:56:38.341 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [6] kAoMYy  sYV, Name must contain two words with letters only at 2026-10-28T11:56:38.341Z
-2026-10-28 13:56:38.490 INFO  [ForkJoinPool-1-worker-1] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:56:38.911 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-28T11:56:38.911Z; duration=2358 ms
-2026-10-28 13:56:39.131 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [3] 5000.10, Deposit amount cannot exceed 5000 at 2026-10-28T11:56:39.131Z
-2026-10-28 13:56:39.188 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-28T11:56:39.188Z
-2026-10-28 13:56:39.601 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [6] kAoMYy  sYV, Name must contain two words with letters only at 2026-10-28T11:56:39.601Z; duration=1260 ms
-2026-10-28 13:56:39.840 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [7]  PkGa, Name must contain two words with letters only at 2026-10-28T11:56:39.840Z
-2026-10-28 13:56:40.389 INFO  [ForkJoinPool-1-worker-1] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-1: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-28T11:56:40.388Z
-2026-10-28 13:56:40.900 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [7]  PkGa, Name must contain two words with letters only at 2026-10-28T11:56:40.900Z; duration=1060 ms
-2026-10-28 13:56:41.013 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [3] 5000.10, Deposit amount cannot exceed 5000 at 2026-10-28T11:56:41.013Z; duration=1882 ms
-2026-10-28 13:56:41.015 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [8] sFrRWI , Name must contain two words with letters only at 2026-10-28T11:56:41.015Z
-2026-10-28 13:56:41.331 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [1] -0.10, Deposit amount must be at least 0.01 at 2026-10-28T11:56:41.331Z
-2026-10-28 13:56:42.178 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [8] sFrRWI , Name must contain two words with letters only at 2026-10-28T11:56:42.178Z; duration=1163 ms
-2026-10-28 13:56:42.271 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-28T11:56:42.271Z; duration=3083 ms
-2026-10-28 13:56:42.460 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [1]  , Name must contain two words with letters only at 2026-10-28T11:56:42.460Z
-2026-10-28 13:56:43.117 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: [1] -0.01, Transfer amount must be at least 0.01 at 2026-10-28T11:56:43.117Z
-2026-10-28 13:56:43.384 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [1] -0.10, Deposit amount must be at least 0.01 at 2026-10-28T11:56:43.384Z; duration=2053 ms
-2026-10-28 13:56:43.483 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [1]  , Name must contain two words with letters only at 2026-10-28T11:56:43.483Z; duration=1023 ms
-2026-10-28 13:56:43.680 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: [2] mmqKz, Name must contain two words with letters only at 2026-10-28T11:56:43.680Z
-2026-10-28 13:56:43.749 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [2] 0.00, Deposit amount must be at least 0.01 at 2026-10-28T11:56:43.749Z
-2026-10-28 13:56:44.583 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: [2] mmqKz, Name must contain two words with letters only at 2026-10-28T11:56:44.583Z; duration=903 ms
-2026-10-28 13:56:44.732 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: userCanUpdateProfileTest() at 2026-10-28T11:56:44.732Z
-2026-10-28 13:56:45.514 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [2] 0.00, Deposit amount must be at least 0.01 at 2026-10-28T11:56:45.514Z; duration=1765 ms
-2026-10-28 13:56:45.716 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: [1] -0.01, Transfer amount must be at least 0.01 at 2026-10-28T11:56:45.716Z; duration=2599 ms
-2026-10-28 13:56:45.827 INFO  [ForkJoinPool-1-worker-1] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-1: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-28T11:56:45.827Z; duration=5439 ms
-2026-10-28 13:56:45.854 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [4] 5000.00 at 2026-10-28T11:56:45.854Z
-2026-10-28 13:56:45.902 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: userCanUpdateProfileTest() at 2026-10-28T11:56:45.902Z; duration=1170 ms
-2026-10-28 13:56:46.106 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-28T11:56:46.106Z
-2026-10-28 13:56:46.409 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-28T11:56:46.409Z
-2026-10-28 13:56:47.269 INFO  [ForkJoinPool-1-worker-1] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 36 - let's create a new webdriver
-2026-10-28 13:56:47.274 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [4] 5000.00 at 2026-10-28T11:56:47.274Z; duration=1420 ms
-2026-10-28 13:56:47.565 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [3] 4999.99 at 2026-10-28T11:56:47.565Z
-2026-10-28 13:56:48.738 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [3] 4999.99 at 2026-10-28T11:56:48.738Z; duration=1173 ms
-2026-10-28 13:56:49.139 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [2] 4073.72 at 2026-10-28T11:56:49.139Z
-2026-10-28 13:56:49.398 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-28T11:56:49.398Z; duration=2989 ms
-2026-10-28 13:56:50.088 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test started: [2] 0.00, Transfer amount must be at least 0.01 at 2026-10-28T11:56:50.088Z
-2026-10-28 13:56:50.139 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-28T11:56:50.139Z; duration=4033 ms
-2026-10-28 13:56:50.241 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [2] 4073.72 at 2026-10-28T11:56:50.241Z; duration=1102 ms
-2026-10-28 13:56:50.575 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: [1] 0.01 at 2026-10-28T11:56:50.575Z
-2026-10-28 13:56:51.160 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-28T11:56:51.160Z
-2026-10-28 13:56:52.102 INFO  [ForkJoinPool-1-worker-1] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:56:52.443 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: [1] 0.01 at 2026-10-28T11:56:52.443Z; duration=1868 ms
-2026-10-28 13:56:52.925 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-28T11:56:52.925Z; duration=1765 ms
-2026-10-28 13:56:53.184 INFO  [ForkJoinPool-1-worker-2] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 37 - let's create a new webdriver
-2026-10-28 13:56:53.201 INFO  [ForkJoinPool-1-worker-5] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 64 - let's create a new webdriver
-2026-10-28 13:56:53.221 INFO  [ForkJoinPool-1-worker-6] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 70 - let's create a new webdriver
-2026-10-28 13:56:53.261 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test started: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-28T11:56:53.261Z
-2026-10-28 13:56:53.938 INFO  [ForkJoinPool-1-worker-4] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-4: Test finished: [2] 0.00, Transfer amount must be at least 0.01 at 2026-10-28T11:56:53.938Z; duration=3850 ms
-2026-10-28 13:56:54.082 INFO  [ForkJoinPool-1-worker-7] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 76 - let's create a new webdriver
-2026-10-28 13:56:55.098 INFO  [ForkJoinPool-1-worker-9] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-9: Test started: adminCanLoginWithCorrectDataTest() at 2026-10-28T11:56:55.098Z
-2026-10-28 13:56:55.100 INFO  [ForkJoinPool-1-worker-9] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 87 - let's create a new webdriver
-2026-10-28 13:56:55.108 INFO  [ForkJoinPool-1-worker-8] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 83 - let's create a new webdriver
-2026-10-28 13:56:55.120 INFO  [ForkJoinPool-1-worker-11] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-11: Test started: userCanLoginWithCorrectDataTest() at 2026-10-28T11:56:55.120Z
-2026-10-28 13:56:55.204 INFO  [ForkJoinPool-1-worker-1] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-1: Test started: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-28T11:56:55.204Z
-2026-10-28 13:56:55.831 INFO  [ForkJoinPool-1-worker-10] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 92 - let's create a new webdriver
-2026-10-28 13:56:56.288 INFO  [ForkJoinPool-1-worker-11] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 95 - let's create a new webdriver
-2026-10-28 13:56:57.046 INFO  [ForkJoinPool-1-worker-12] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 108 - let's create a new webdriver
-2026-10-28 13:56:57.431 INFO  [ForkJoinPool-1-worker-13] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 112 - let's create a new webdriver
-2026-10-28 13:56:58.500 INFO  [ForkJoinPool-1-worker-14] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 116 - let's create a new webdriver
-2026-10-28 13:56:58.608 INFO  [ForkJoinPool-1-worker-15] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 123 - let's create a new webdriver
-2026-10-28 13:57:00.508 INFO  [ForkJoinPool-1-worker-3] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-3: Test finished: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-28T11:57:00.508Z; duration=7247 ms
-2026-10-28 13:57:00.640 INFO  [ForkJoinPool-1-worker-16] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 135 - let's create a new webdriver
-2026-10-28 13:57:02.351 INFO  [ForkJoinPool-1-worker-5] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:03.165 INFO  [ForkJoinPool-1-worker-6] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:04.335 INFO  [ForkJoinPool-1-worker-2] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:05.485 INFO  [ForkJoinPool-1-worker-7] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:05.697 INFO  [ForkJoinPool-1-worker-1] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-1: Test finished: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-28T11:57:05.697Z; duration=10493 ms
-2026-10-28 13:57:07.694 INFO  [ForkJoinPool-1-worker-5] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-5: Test started: adminCannotCreateUserWithInvalidDataTest() at 2026-10-28T11:57:07.694Z
-2026-10-28 13:57:10.164 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test started: userCanCreateAccountTest() at 2026-10-28T11:57:10.164Z
-2026-10-28 13:57:10.221 INFO  [ForkJoinPool-1-worker-6] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-6: Test started: adminCanCreateUserTest() at 2026-10-28T11:57:10.221Z
-2026-10-28 13:57:11.038 INFO  [ForkJoinPool-1-worker-7] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-7: Test started: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-28T11:57:11.038Z
-2026-10-28 13:57:15.302 INFO  [ForkJoinPool-1-worker-2] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-2: Test finished: userCanCreateAccountTest() at 2026-10-28T11:57:15.302Z; duration=5138 ms
-2026-10-28 13:57:17.379 INFO  [ForkJoinPool-1-worker-5] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-5: Test finished: adminCannotCreateUserWithInvalidDataTest() at 2026-10-28T11:57:17.379Z; duration=9685 ms
-2026-10-28 13:57:18.407 INFO  [ForkJoinPool-1-worker-8] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:20.401 INFO  [ForkJoinPool-1-worker-7] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-7: Test finished: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-28T11:57:20.401Z; duration=9363 ms
-2026-10-28 13:57:21.740 INFO  [ForkJoinPool-1-worker-6] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-6: Test finished: adminCanCreateUserTest() at 2026-10-28T11:57:21.740Z; duration=11519 ms
-2026-10-28 13:57:22.980 INFO  [ForkJoinPool-1-worker-8] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-8: Test started: userCanDepositMoneyIntoAccountTest() at 2026-10-28T11:57:22.980Z
-2026-10-28 13:57:27.921 INFO  [ForkJoinPool-1-worker-9] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:28.653 INFO  [ForkJoinPool-1-worker-10] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:29.891 INFO  [ForkJoinPool-1-worker-11] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:31.568 INFO  [ForkJoinPool-1-worker-10] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-10: Test started: userCanUpdateProfileTest() at 2026-10-28T11:57:31.568Z
-2026-10-28 13:57:32.082 INFO  [ForkJoinPool-1-worker-12] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:32.826 INFO  [ForkJoinPool-1-worker-8] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-8: Test finished: userCanDepositMoneyIntoAccountTest() at 2026-10-28T11:57:32.826Z; duration=9846 ms
-2026-10-28 13:57:37.305 INFO  [ForkJoinPool-1-worker-12] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-12: Test started: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-28T11:57:37.305Z
-2026-10-28 13:57:40.451 INFO  [ForkJoinPool-1-worker-10] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-10: Test finished: userCanUpdateProfileTest() at 2026-10-28T11:57:40.451Z; duration=8883 ms
-2026-10-28 13:57:40.822 INFO  [ForkJoinPool-1-worker-9] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-9: Test finished: adminCanLoginWithCorrectDataTest() at 2026-10-28T11:57:40.822Z; duration=45724 ms
-2026-10-28 13:57:41.603 INFO  [ForkJoinPool-1-worker-11] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-11: Test finished: userCanLoginWithCorrectDataTest() at 2026-10-28T11:57:41.603Z; duration=46483 ms
-2026-10-28 13:57:46.150 INFO  [ForkJoinPool-1-worker-13] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:47.194 INFO  [ForkJoinPool-1-worker-12] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-12: Test finished: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-28T11:57:47.194Z; duration=9889 ms
-2026-10-28 13:57:48.989 INFO  [ForkJoinPool-1-worker-13] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-13: Test started: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-28T11:57:48.989Z
-2026-10-28 13:57:51.215 INFO  [ForkJoinPool-1-worker-15] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:51.931 INFO  [ForkJoinPool-1-worker-14] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:52.551 INFO  [ForkJoinPool-1-worker-16] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
-2026-10-28 13:57:54.309 INFO  [ForkJoinPool-1-worker-15] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-15: Test started: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-28T11:57:54.309Z
-2026-10-28 13:57:54.797 INFO  [ForkJoinPool-1-worker-14] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-14: Test started: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-28T11:57:54.797Z
-2026-10-28 13:57:54.957 INFO  [ForkJoinPool-1-worker-16] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-16: Test started: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-28T11:57:54.957Z
-2026-10-28 13:57:56.058 INFO  [ForkJoinPool-1-worker-13] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-13: Test finished: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-28T11:57:56.058Z; duration=7069 ms
-2026-10-28 13:58:00.131 INFO  [ForkJoinPool-1-worker-15] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-15: Test finished: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-28T11:58:00.131Z; duration=5822 ms
-2026-10-28 13:58:01.874 INFO  [ForkJoinPool-1-worker-14] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-14: Test finished: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-28T11:58:01.874Z; duration=7077 ms
-2026-10-28 13:58:03.795 INFO  [ForkJoinPool-1-worker-16] common.extensions.TimingExtension - Thread ForkJoinPool-1-worker-16: Test finished: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-28T11:58:03.795Z; duration=8838 ms
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 36 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 36 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 64 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 70 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 37 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 76 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 83 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 87 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 92 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 95 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 108 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 112 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 123 - nothing to close
-2026-10-28 13:58:04.577 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 116 - nothing to close
-2026-10-28 13:58:04.578 INFO  [Dead threads watchdog] c.c.s.impl.DeadThreadsWatchdog - No webdriver found for thread: 135 - nothing to close
+2026-10-30 06:22:56.451 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanCreateAccountTest() at 2026-10-30T10:22:56.439Z
+2026-10-30 06:23:16.102 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanCreateAccountTest() at 2026-10-30T10:23:16.102Z; duration=19663 ms
+2026-10-30 06:23:16.469 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanCreateUserWithCorrectDataTest() at 2026-10-30T10:23:16.469Z
+2026-10-30 06:23:17.577 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanCreateUserWithCorrectDataTest() at 2026-10-30T10:23:17.576Z; duration=1107 ms
+2026-10-30 06:23:18.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1]  , QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-30T10:23:18.386Z
+2026-10-30 06:23:24.572 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1]  , QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-30T10:23:24.572Z; duration=6186 ms
+2026-10-30 06:23:24.584 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] Z, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:24.584Z
+2026-10-30 06:23:25.304 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] Z, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.304Z; duration=720 ms
+2026-10-30 06:23:25.313 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] tJybcMZQqFKplRwnOeMB, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.313Z
+2026-10-30 06:23:25.959 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] tJybcMZQqFKplRwnOeMB, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.959Z; duration=646 ms
+2026-10-30 06:23:26.006 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] rgyj@, QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-30T10:23:26.006Z
+2026-10-30 06:23:26.537 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] rgyj@, QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-30T10:23:26.537Z; duration=531 ms
+2026-10-30 06:23:26.669 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] 0.01 at 2026-10-30T10:23:26.669Z
+2026-10-30 06:23:33.165 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] 0.01 at 2026-10-30T10:23:33.165Z; duration=6496 ms
+2026-10-30 06:23:33.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 691.83 at 2026-10-30T10:23:33.386Z
+2026-10-30 06:23:34.662 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 691.83 at 2026-10-30T10:23:34.662Z; duration=1276 ms
+2026-10-30 06:23:34.844 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 4999.99 at 2026-10-30T10:23:34.842Z
+2026-10-30 06:23:35.996 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 4999.99 at 2026-10-30T10:23:35.996Z; duration=1154 ms
+2026-10-30 06:23:36.191 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] 5000.00 at 2026-10-30T10:23:36.191Z
+2026-10-30 06:23:37.370 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] 5000.00 at 2026-10-30T10:23:37.370Z; duration=1179 ms
+2026-10-30 06:23:37.598 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] -0.10, Invalid account or amount at 2026-10-30T10:23:37.598Z
+2026-10-30 06:23:39.097 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] -0.10, Invalid account or amount at 2026-10-30T10:23:39.097Z; duration=1499 ms
+2026-10-30 06:23:39.317 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 0.00, Invalid account or amount at 2026-10-30T10:23:39.317Z
+2026-10-30 06:23:40.988 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 0.00, Invalid account or amount at 2026-10-30T10:23:40.988Z; duration=1671 ms
+2026-10-30 06:23:41.131 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 5000.10, Deposit amount exceeds the 5000 limit at 2026-10-30T10:23:41.131Z
+2026-10-30 06:23:42.604 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 5000.10, Deposit amount exceeds the 5000 limit at 2026-10-30T10:23:42.604Z; duration=1473 ms
+2026-10-30 06:23:42.793 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-30T10:23:42.793Z
+2026-10-30 06:23:43.875 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-30T10:23:43.875Z; duration=1082 ms
+2026-10-30 06:23:44.026 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:44.026Z
+2026-10-30 06:23:45.782 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:45.782Z; duration=1756 ms
+2026-10-30 06:23:46.144 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanGenerateAuthTokenTest() at 2026-10-30T10:23:46.144Z
+2026-10-30 06:23:46.889 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanGenerateAuthTokenTest() at 2026-10-30T10:23:46.889Z; duration=745 ms
+2026-10-30 06:23:47.066 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanGenerateAuthTokenTest() at 2026-10-30T10:23:47.066Z
+2026-10-30 06:23:47.293 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanGenerateAuthTokenTest() at 2026-10-30T10:23:47.293Z; duration=227 ms
+2026-10-30 06:23:47.313 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanUpdateProfileTest() at 2026-10-30T10:23:47.313Z
+2026-10-30 06:23:48.837 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanUpdateProfileTest() at 2026-10-30T10:23:48.837Z; duration=1524 ms
+2026-10-30 06:23:49.030 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1]  , Name must contain two words with letters only at 2026-10-30T10:23:49.030Z
+2026-10-30 06:23:49.871 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1]  , Name must contain two words with letters only at 2026-10-30T10:23:49.871Z; duration=841 ms
+2026-10-30 06:23:50.031 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] mKHcYu, Name must contain two words with letters only at 2026-10-30T10:23:50.031Z
+2026-10-30 06:23:50.802 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] mKHcYu, Name must contain two words with letters only at 2026-10-30T10:23:50.802Z; duration=771 ms
+2026-10-30 06:23:50.949 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] lTFfvuK xenPIuN FtoDpnumyY, Name must contain two words with letters only at 2026-10-30T10:23:50.948Z
+2026-10-30 06:23:51.754 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] lTFfvuK xenPIuN FtoDpnumyY, Name must contain two words with letters only at 2026-10-30T10:23:51.754Z; duration=806 ms
+2026-10-30 06:23:51.926 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] lEdXAR 18576YkzyD, Name must contain two words with letters only at 2026-10-30T10:23:51.926Z
+2026-10-30 06:23:52.769 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] lEdXAR 18576YkzyD, Name must contain two words with letters only at 2026-10-30T10:23:52.769Z; duration=843 ms
+2026-10-30 06:23:52.940 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [5] KiLSokJIEp ^jlcKC, Name must contain two words with letters only at 2026-10-30T10:23:52.940Z
+2026-10-30 06:23:53.708 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [5] KiLSokJIEp ^jlcKC, Name must contain two words with letters only at 2026-10-30T10:23:53.708Z; duration=768 ms
+2026-10-30 06:23:53.886 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [6] Upm  FrujBZN, Name must contain two words with letters only at 2026-10-30T10:23:53.886Z
+2026-10-30 06:23:54.643 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [6] Upm  FrujBZN, Name must contain two words with letters only at 2026-10-30T10:23:54.643Z; duration=757 ms
+2026-10-30 06:23:54.828 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [7]  trmQa, Name must contain two words with letters only at 2026-10-30T10:23:54.828Z
+2026-10-30 06:23:55.594 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [7]  trmQa, Name must contain two words with letters only at 2026-10-30T10:23:55.594Z; duration=766 ms
+2026-10-30 06:23:55.755 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [8] BpC , Name must contain two words with letters only at 2026-10-30T10:23:55.755Z
+2026-10-30 06:23:56.506 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [8] BpC , Name must contain two words with letters only at 2026-10-30T10:23:56.506Z; duration=751 ms
+2026-10-30 06:23:56.684 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:56.684Z
+2026-10-30 06:24:00.204 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-30T10:24:00.204Z; duration=3520 ms
+2026-10-30 06:24:00.538 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-30T10:24:00.538Z
+2026-10-30 06:24:01.906 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-30T10:24:01.906Z; duration=1368 ms
+2026-10-30 06:24:02.116 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-30T10:24:02.116Z
+2026-10-30 06:24:04.632 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-30T10:24:04.632Z; duration=2516 ms
+2026-10-30 06:24:04.914 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] -0.01, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:04.914Z
+2026-10-30 06:24:07.429 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] -0.01, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:07.429Z; duration=2515 ms
+2026-10-30 06:24:07.616 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 0.00, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:07.616Z
+2026-10-30 06:24:10.265 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 0.00, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:10.265Z; duration=2649 ms
+2026-10-30 06:24:10.474 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-30T10:24:10.474Z
+2026-10-30 06:24:12.814 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-30T10:24:12.814Z; duration=2340 ms
+2026-10-30 06:24:13.036 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-30T10:24:13.036Z
+2026-10-30 06:24:15.611 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-30T10:24:15.611Z; duration=2575 ms
+2026-10-30 06:24:15.824 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:24:15.823Z
+2026-10-30 06:24:19.244 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:24:19.244Z; duration=3421 ms
+2026-10-30 06:24:20.846 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:25.179 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:25.975 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanCreateAccountTest() at 2026-10-30T10:24:25.975Z
+2026-10-30 06:24:28.504 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanCreateAccountTest() at 2026-10-30T10:24:28.504Z; duration=2529 ms
+2026-10-30 06:24:28.819 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:31.786 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:32.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanCreateUserTest() at 2026-10-30T10:24:32.386Z
+2026-10-30 06:24:34.403 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanCreateUserTest() at 2026-10-30T10:24:34.403Z; duration=2017 ms
+2026-10-30 06:24:34.748 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:37.611 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:38.264 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCannotCreateUserWithInvalidDataTest() at 2026-10-30T10:24:38.264Z
+2026-10-30 06:24:40.342 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCannotCreateUserWithInvalidDataTest() at 2026-10-30T10:24:40.342Z; duration=2078 ms
+2026-10-30 06:24:40.888 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:43.363 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:44.190 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanDepositMoneyIntoAccountTest() at 2026-10-30T10:24:44.190Z
+2026-10-30 06:24:47.248 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanDepositMoneyIntoAccountTest() at 2026-10-30T10:24:47.248Z; duration=3058 ms
+2026-10-30 06:24:47.917 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:50.364 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:51.191 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-30T10:24:51.191Z
+2026-10-30 06:24:53.416 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-30T10:24:53.416Z; duration=2225 ms
+2026-10-30 06:24:54.223 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:56.544 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:00.251 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-30T10:25:00.251Z
+2026-10-30 06:25:02.623 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-30T10:25:02.623Z; duration=2372 ms
+2026-10-30 06:25:03.432 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:05.816 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:06.652 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-30T10:25:06.651Z
+2026-10-30 06:25:08.624 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-30T10:25:08.624Z; duration=1973 ms
+2026-10-30 06:25:09.071 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanLoginWithCorrectDataTest() at 2026-10-30T10:25:09.071Z
+2026-10-30 06:25:09.628 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:11.883 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:13.666 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanLoginWithCorrectDataTest() at 2026-10-30T10:25:13.666Z; duration=4595 ms
+2026-10-30 06:25:13.896 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanLoginWithCorrectDataTest() at 2026-10-30T10:25:13.896Z
+2026-10-30 06:25:13.897 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:16.497 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:18.225 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanLoginWithCorrectDataTest() at 2026-10-30T10:25:18.225Z; duration=4329 ms
+2026-10-30 06:25:18.831 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:21.846 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:22.636 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-30T10:25:22.636Z
+2026-10-30 06:25:24.625 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-30T10:25:24.625Z; duration=1989 ms
+2026-10-30 06:25:25.419 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:27.632 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:28.396 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanUpdateProfileTest() at 2026-10-30T10:25:28.396Z
+2026-10-30 06:25:30.510 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanUpdateProfileTest() at 2026-10-30T10:25:30.510Z; duration=2114 ms
+2026-10-30 06:25:31.401 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:33.661 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:34.438 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-30T10:25:34.438Z
+2026-10-30 06:25:37.498 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-30T10:25:37.498Z; duration=3060 ms
+2026-10-30 06:25:38.509 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:41.142 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:41.992 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-30T10:25:41.992Z
+2026-10-30 06:25:45.858 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-30T10:25:45.858Z; duration=3866 ms
+2026-10-30 06:25:46.874 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:49.570 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:50.379 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-30T10:25:50.379Z
+2026-10-30 06:25:53.856 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-30T10:25:53.856Z; duration=3477 ms
+2026-10-30 06:25:54.945 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:57.306 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:58.301 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:25:58.301Z
+2026-10-30 06:26:02.277 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:26:02.276Z; duration=3975 ms

@@ -2,6 +2,7 @@ package ui;
 
 import api.requests.steps.UserSteps;
 import base.BaseUITest;
+import common.annotations.APIVersion;
 import common.annotations.UserSession;
 import common.storage.SessionStorage;
 import api.models.AccountResponse;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@APIVersion("with_database")
 public class CreateAccountTest extends BaseUITest {
 
     @Test

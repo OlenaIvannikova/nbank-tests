@@ -1,5 +1,8 @@
 package api.tests;
 
+import api.dao.UserDao;
+import api.dao.comparison.DaoAndModelAssertions;
+import api.requests.steps.DataBaseSteps;
 import common.generators.RandomModelGenerator;
 import api.models.UserRequest;
 import api.models.UserResponse;
@@ -37,10 +40,12 @@ public class CreateUserTest extends BaseTest {
         ModelAssertions.assertThatModels(userRequest, userResponse).match();
 
         List<UserResponse> users = getAllUsers();
-
         assertThat(users)
                 .extracting(UserResponse::getUsername)
                 .contains(userRequest.getUsername());
+
+        UserDao userDao = DataBaseSteps.getUserByUsername(userRequest.getUsername());
+        DaoAndModelAssertions.assertThat(userResponse, userDao).match();
     }
 
     @ParameterizedTest
@@ -59,10 +64,11 @@ public class CreateUserTest extends BaseTest {
                 .post(userRequest);
 
         List<UserResponse> users = getAllUsers();
-
         assertThat(users)
                 .extracting(UserResponse::getUsername)
                 .doesNotContain(userRequest.getUsername());
+
+        assertThat(DataBaseSteps.getUserByUsername(userRequest.getUsername())).isNull();
     }
 }
 

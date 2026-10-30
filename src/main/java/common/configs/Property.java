@@ -10,7 +10,10 @@ public enum Property {
     UI_BASE_URL("uiBaseUrl"),
     BROWSER("browser"),
     BROWSER_SIZE("browserSize"),
-    EXPLICIT_WAIT_SECONDS("explicitWaitSeconds");
+    EXPLICIT_WAIT_SECONDS("explicitWaitSeconds"),
+    DB_URL("db.url"),
+    DB_LOGIN("db.username"),
+    DB_PASSWORD("db.password");
 
     private final String key;
 

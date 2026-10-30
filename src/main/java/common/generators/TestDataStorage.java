@@ -51,6 +51,14 @@ public class TestDataStorage {
     }
 
     public void deleteCreatedEntities() {
+        deleteCreatedEntities(false);
+    }
+
+    public void deleteCreatedEntitiesExceptAccounts() {
+        deleteCreatedEntities(true);
+    }
+
+    private void deleteCreatedEntities(boolean skipAccounts) {
         try {
             List<CreatedEntity> snapshot =
                     new ArrayList<>(createdEntities);
@@ -58,6 +66,11 @@ public class TestDataStorage {
             Collections.reverse(snapshot);
 
             for (CreatedEntity entity : snapshot) {
+                if (skipAccounts
+                        && entity.getEndpoint() == Endpoint.ACCOUNT_DELETION) {
+                    continue;
+                }
+
                 try {
                     var requestSpec = RequestSpecs.authAsUser(
                             entity.getCredentials().getUsername(),
@@ -71,6 +84,7 @@ public class TestDataStorage {
                     ).delete(entity.getId());
 
                 } catch (Exception e) {
+                    // Здесь можно добавить логирование ошибки очистки.
                 }
             }
         } finally {
