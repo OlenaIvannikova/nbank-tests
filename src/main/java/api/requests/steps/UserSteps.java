@@ -91,6 +91,18 @@ public class UserSteps {
                 .response();
     }
 
+    public Response transferWithFraudCheck(TransferRequest transferRequest,
+                                           ResponseSpecification responseSpec) {
+
+        return new CrudRequester(
+                RequestSpecs.authAsUser(username, password),
+                Endpoint.TRANSFER_WITH_FRAUD_CHECK,
+                ResponseSpecs.requestReturnsOK())
+                .post(transferRequest)
+                .extract()
+                .response();
+    }
+
     public AccountResponse getAccountById(Long accountId) {
         return new ValidatedCrudRequester<AccountResponse>(
                 RequestSpecs.authAsUser(username, password),

@@ -16,6 +16,12 @@ public class TransferResponse extends BaseModel {
     private long receiverAccountId;
     private BigDecimal amount;
     private String message;
+    private String status;
+    private Long transactionId;
+    private double fraudRiskScore;
+    private String fraudReason;
+    private boolean requiresVerification;
+    private boolean requiresManualReview;
 }
 
 

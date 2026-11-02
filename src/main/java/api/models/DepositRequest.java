@@ -16,4 +16,8 @@ public class DepositRequest extends BaseModel {
 
     private long id;
     private BigDecimal balance;
+
+    private Long accountId;
+    private BigDecimal amount;
+    private String description;
 }

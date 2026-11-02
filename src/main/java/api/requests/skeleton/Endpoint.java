@@ -17,6 +17,7 @@ public enum Endpoint {
     // Accounts
     ACCOUNT_CREATION("/accounts", BaseModel.class, AccountResponse.class),
     TRANSFER("/accounts/transfer", TransferRequest.class, TransferResponse.class),
+    TRANSFER_WITH_FRAUD_CHECK("/accounts/transfer-with-fraud-check", TransferRequest.class, TransferResponse.class),
     DEPOSIT("/accounts/deposit", DepositRequest.class, AccountResponse.class),
     ACCOUNT_TRANSACTIONS("/accounts/{accountId}/transactions", BaseModel.class, Transaction.class),
     ACCOUNT_DELETION("/accounts", BaseModel.class, AccountDeletionResponse.class),

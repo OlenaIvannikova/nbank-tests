@@ -1,6 +1,11 @@
 services:
   backend:
     image: nobugsme/nbank:with_database_with_fix
+    # Для WireMock образ: with_fraud_check_with_transfer_fix
+    #container_name: nbank-app
+    # явно добавили соответствие host.docker.internal адресу хоста
+    #extra_hosts:
+    #  - "host.docker.internal:host-gateway"
     ports:
       - "4111:4111"
     environment:
@@ -8,10 +13,22 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      # Backend работает внутри Docker-контейнера, а WireMock запущен на хост-машине.
+      # host.docker.internal позволяет контейнеру обратиться к хосту, на котором работает Docker.
+      # Когда backend выполняет запрос к Fraud Detection Service,
+      # он обращается по адресу из переменной окружения и попадает в WireMock.
+      #- FRAUD_DETECTION_SERVICE_URL=http://host.docker.internal:9090
     depends_on:
       - postgres
     networks:
       - nbank-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4111/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   postgres:
     image: postgres:15-alpine
