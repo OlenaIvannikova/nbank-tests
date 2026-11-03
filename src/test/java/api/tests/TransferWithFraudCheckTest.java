@@ -28,7 +28,6 @@ import static common.generators.RandomData.generateTransferAmount;
 public class TransferWithFraudCheckTest extends BaseTest {
 
     @Test
-    @Disabled
     @FraudCheckMock(
             status = "SUCCESS",
             decision = "APPROVED",
@@ -40,7 +39,6 @@ public class TransferWithFraudCheckTest extends BaseTest {
     public void testTransferWithFraudCheck() {
         List<UserRequest> users = createTwoDifferentUsers();
         UserRequest sender = users.get(0);
-        UserRequest receiver = users.get(1);
 
         UserSteps senderSteps = new UserSteps(
                 sender.getUsername(),
