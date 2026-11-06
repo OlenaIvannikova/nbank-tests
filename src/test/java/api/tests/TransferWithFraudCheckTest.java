@@ -28,6 +28,7 @@ import static common.generators.RandomData.generateTransferAmount;
 public class TransferWithFraudCheckTest extends BaseTest {
 
     @Test
+    @Disabled
     @FraudCheckMock(
             status = "SUCCESS",
             decision = "APPROVED",

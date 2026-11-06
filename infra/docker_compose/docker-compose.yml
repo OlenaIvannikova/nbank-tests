@@ -1,10 +1,10 @@
 services:
   backend:
-    image: nobugsme/nbank:with_fraud_check_with_transfer_fix
-    container_name: nbank-app
+    image: nobugsme/nbank:with_database_with_fix
+    # container_name: nbank-app
     # явно добавили соответствие host.docker.internal адресу хоста
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    #extra_hosts:
+    #  - "host.docker.internal:host-gateway"
     ports:
       - "4111:4111"
     environment:
@@ -16,7 +16,7 @@ services:
       # host.docker.internal позволяет контейнеру обратиться к хосту, на котором работает Docker.
       # Когда backend выполняет запрос к Fraud Detection Service,
       # он обращается по адресу из переменной окружения и попадает в WireMock.
-      - FRAUD_DETECTION_SERVICE_URL=http://host.docker.internal:9090
+      # - FRAUD_DETECTION_SERVICE_URL=http://host.docker.internal:9090
     depends_on:
       - postgres
     networks:
@@ -34,9 +34,9 @@ services:
     ports:
       - "5433:5432"
     environment:
-      - POSTGRES_DB=nbank
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d:ro

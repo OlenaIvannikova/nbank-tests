@@ -37,8 +37,6 @@ public class UserSteps {
 
         DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
         deposit.setId(account.getId());
-        deposit.setAccountId(account.getId());
-        deposit.setAmount(deposit.getBalance());
         depositMoney(deposit, ResponseSpecs.requestReturnsOK());
 
         return getAccountById(account.getId());

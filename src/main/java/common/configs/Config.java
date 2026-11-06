@@ -22,6 +22,31 @@ public class Config {
     }
 
     public static String getProperty(String key) {
+        /*
+        Приоритеты:
+        1. System Properties (-Dkey=value): для CI/CD
+        2. Environment Variables (KEY=value): для Docker-а, переменная  в environment в Docker compose
+        3. config.properties (значения по умолчанию): для локального запуска
+         */
+
+        // ПРИОРИТЕТ 1 - это системное свойство (-DapiBaseUrl =..)
+        String value = System.getProperty(key);
+
+        if (value != null && !value.isBlank()) {
+            return value;
+        }
+
+        // ПРИОРИТЕТ 2 - это переменная окружения контейнера (APIBASEURL=)
+        // Пример 1: apiBaseUrl -> переменная окружения будет APIBASEURL
+        // Пример 2: admin.username -> ADMIN_USERNAME
+        String envKey = key.toUpperCase().replace('.', '_');
+        value = System.getenv(envKey);
+
+        if (value != null && !value.isBlank()) {
+            return value;
+        }
+
+        // ПРИОРИТЕТ 3 - это config.properties
         return INSTANCE.properties.getProperty(key);
     }
 
