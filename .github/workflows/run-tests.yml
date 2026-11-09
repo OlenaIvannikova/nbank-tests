@@ -43,7 +43,7 @@ jobs:
         run: ./mvnw clean test -q
         env:
           APIBASEURL: http://localhost:4111
-          UIBASEURL: http://localhost:3000
+          UIBASEURL: http://frontend
           UIREMOTE: http://localhost:4444/wd/hub
           DB_URL: jdbc:postgresql://localhost:5433/nbank
           DB_LOGIN: ${{ secrets.POSTGRES_USER }}
