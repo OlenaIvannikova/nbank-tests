@@ -1,11 +1,24 @@
 #!/bin/bash
 
+# Режимы безопасности Bash
 # set -euo pipefail
   # Это 3 режима безопасности Bash:
   # -e	Остановить скрипт при ошибке команды
   # -u	Ошибка при использовании неопределённой переменной
   # -o pipefail	Ошибка в pipeline, если завершилась ошибкой любая команда
 set -euo pipefail
+
+# Определяем корневую директорию проекта
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
+
+# Пути к конфигурационным файлам
+# Путь к Docker Compose
+COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
+ENV_FILE="$PROJECT_DIR/.env"
+
+# Путь к browsers.json
+json_file="$PROJECT_DIR/selenoid/config/browsers.json"
 
 echo ">>> Checking prerequisites"
 
@@ -15,8 +28,6 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Путь к browsers.json
-json_file="././selenoid/config/browsers.json"
 
 # Проверяем существование файла
 if [[ ! -f "$json_file" ]]; then
@@ -26,7 +37,7 @@ fi
 
 echo ">>> Pulling browser images"
 
-# Извлекаем образы и скачиваем каждый
+# Извлекаем список образов из browsers.json и скачиваем каждый
 while IFS= read -r image; do
     [[ -z "$image" ]] && continue
 
@@ -37,10 +48,16 @@ done < <(jq -r '.. | objects | .image? // empty' "$json_file")
 
 echo ">>> Stopping Docker Compose"
 
-docker compose down
+docker compose \
+    --env-file "$ENV_FILE" \
+    -f "$COMPOSE_FILE" \
+    down
 
 echo ">>> Starting Docker Compose"
 
-docker compose up -d
+docker compose \
+    --env-file "$ENV_FILE" \
+    -f "$COMPOSE_FILE" \
+    up -d
 
 echo ">>> Infrastructure started successfully"
