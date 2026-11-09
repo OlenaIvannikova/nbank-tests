@@ -15,10 +15,14 @@ PROJECT_DIR="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
 # Пути к конфигурационным файлам
 # Путь к Docker Compose
 COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
-ENV_FILE="$PROJECT_DIR/.env"
 
 # Путь к browsers.json
 json_file="$PROJECT_DIR/selenoid/config/browsers.json"
+
+# Проверяем обязательные переменные окружения
+: "${POSTGRES_DB:?POSTGRES_DB is not set}"
+: "${POSTGRES_USER:?POSTGRES_USER is not set}"
+: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set}"
 
 echo ">>> Checking prerequisites"
 
@@ -28,8 +32,7 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-
-# Проверяем существование файла
+# Проверяем существование browsers.json файла
 if [[ ! -f "$json_file" ]]; then
     echo "ERROR: browsers.json not found: $json_file"
     exit 1
@@ -48,16 +51,10 @@ done < <(jq -r '.. | objects | .image? // empty' "$json_file")
 
 echo ">>> Stopping Docker Compose"
 
-docker compose \
-    --env-file "$ENV_FILE" \
-    -f "$COMPOSE_FILE" \
-    down
+docker compose -f "$COMPOSE_FILE" down
 
 echo ">>> Starting Docker Compose"
 
-docker compose \
-    --env-file "$ENV_FILE" \
-    -f "$COMPOSE_FILE" \
-    up -d
+docker compose -f "$COMPOSE_FILE" up -d
 
 echo ">>> Infrastructure started successfully"
