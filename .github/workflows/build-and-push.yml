@@ -11,6 +11,12 @@ jobs:
     name: Build, Test, Checkstyle and Push
     runs-on: ubuntu-latest
 
+    env:
+      # Для Docker Compose / PostgreSQL
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
     steps:
       # Копируем файлы репозитория внутрь CI агента
       - name: Checkout repository
