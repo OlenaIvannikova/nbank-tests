@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Table {
+  ACCOUNTS("accounts"),
+  CUSTOMERS("customers"),
+  TRANSACTIONS("transactions");
 
-    ACCOUNTS("accounts"),
-    CUSTOMERS("customers"),
-    TRANSACTIONS("transactions");
-
-    private final String tableName;
+  private final String tableName;
 }

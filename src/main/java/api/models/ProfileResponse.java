@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileResponse extends BaseModel {
-    private String message;
-    private Customer customer;
+  private String message;
+  private Customer customer;
 }
-

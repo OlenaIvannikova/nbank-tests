@@ -28,6 +28,9 @@
         <logback.classic.version>1.5.15</logback.classic.version>
         <postgresql.version>42.7.8</postgresql.version>
         <wiremock.version>3.4.2</wiremock.version>
+        <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
+        <checkstyle.version>14.4.0</checkstyle.version>
+        <spotless.maven.plugin.version>3.11.0</spotless.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -124,6 +127,67 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>config/checkstyle.xml</configLocation>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <consoleOutput>true</consoleOutput>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle-validation</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.maven.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotless-check</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

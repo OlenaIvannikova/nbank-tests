@@ -1,12 +1,10 @@
 package api.models;
 
-
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -14,12 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Customer extends BaseModel {
 
-    private long id;
-    private String username;
-    private String password;
-    private String name;
-    private String role;
-    private List<AccountResponse> accounts;
+  private long id;
+  private String username;
+  private String password;
+  private String name;
+  private String role;
+  private List<AccountResponse> accounts;
 }
-
-

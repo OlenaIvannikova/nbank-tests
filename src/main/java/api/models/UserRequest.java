@@ -14,17 +14,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequest extends BaseModel {
 
-    @GeneratingRule(regex = "^[A-Za-z0-9]{3,15}$")
-    private String username;
-    @GeneratingRule(regex = "^[A-Z]{3}[a-z]{4}[0-9]{3}[$%&]{2}$")
-    private String password;
-    @GeneratingRule(regex = "^USER$")
-    private String role;
+  @GeneratingRule(regex = "^[A-Za-z0-9]{3,15}$")
+  private String username;
 
-    public static UserRequest getAdmin() {
-        return UserRequest.builder()
-                .username(Config.getProperty(Property.ADMIN_LOGIN))
-                .password(Config.getProperty(Property.ADMIN_PASSWORD))
-                .build();
-    }
+  @GeneratingRule(regex = "^[A-Z]{3}[a-z]{4}[0-9]{3}[$%&]{2}$")
+  private String password;
+
+  @GeneratingRule(regex = "^USER$")
+  private String role;
+
+  public static UserRequest getAdmin() {
+    return UserRequest.builder()
+        .username(Config.getProperty(Property.ADMIN_LOGIN))
+        .password(Config.getProperty(Property.ADMIN_PASSWORD))
+        .build();
+  }
 }

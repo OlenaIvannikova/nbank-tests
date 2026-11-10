@@ -13,14 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeletionCredentials {
 
-    String username;
-    String password;
+  String username;
+  String password;
 
-    public static DeletionCredentials admin() {
-        return new DeletionCredentials(
-                Config.getProperty(Property.ADMIN_LOGIN),
-                Config.getProperty(Property.ADMIN_PASSWORD)
-        );
-    }
+  public static DeletionCredentials admin() {
+    return new DeletionCredentials(
+        Config.getProperty(Property.ADMIN_LOGIN), Config.getProperty(Property.ADMIN_PASSWORD));
+  }
 }
-

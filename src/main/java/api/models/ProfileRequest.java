@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileRequest extends BaseModel {
-    @GeneratingRule(regex = "^[A-Za-z]{1,5} [A-Za-z]{1,5}$")
-    private String name;
+  @GeneratingRule(regex = "^[A-Za-z]{1,5} [A-Za-z]{1,5}$")
+  private String name;
 }

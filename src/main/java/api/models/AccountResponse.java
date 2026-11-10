@@ -1,12 +1,11 @@
 package api.models;
 
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Builder
@@ -14,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class AccountResponse extends BaseModel {
 
-    private Long id;
-    private String accountNumber;
-    private BigDecimal balance;
-    private List<Transaction> transactions;
+  private Long id;
+  private String accountNumber;
+  private BigDecimal balance;
+  private List<Transaction> transactions;
 }

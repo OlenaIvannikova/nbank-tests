@@ -8,26 +8,22 @@ import java.util.regex.Pattern;
 
 public final class PathParamValidator {
 
-    private static final Pattern PATH_PARAM_PATTERN =
-            Pattern.compile("\\{([^/{}]+)}");
+  private static final Pattern PATH_PARAM_PATTERN = Pattern.compile("\\{([^/{}]+)}");
 
-    private PathParamValidator() {
+  private PathParamValidator() {}
+
+  public static void validate(String url, Map<String, ?> pathParams) {
+    Set<String> expectedParams = new LinkedHashSet<>();
+
+    Matcher matcher = PATH_PARAM_PATTERN.matcher(url);
+
+    while (matcher.find()) {
+      expectedParams.add(matcher.group(1));
     }
 
-    public static void validate(String url, Map<String, ?> pathParams) {
-        Set<String> expectedParams = new LinkedHashSet<>();
-
-        Matcher matcher = PATH_PARAM_PATTERN.matcher(url);
-
-        while (matcher.find()) {
-            expectedParams.add(matcher.group(1));
-        }
-
-        if (!expectedParams.equals(pathParams.keySet())) {
-            throw new IllegalArgumentException(
-                    "Expected path parameters: " + expectedParams
-                            + ", but received: " + pathParams.keySet()
-            );
-        }
+    if (!expectedParams.equals(pathParams.keySet())) {
+      throw new IllegalArgumentException(
+          "Expected path parameters: " + expectedParams + ", but received: " + pathParams.keySet());
     }
+  }
 }

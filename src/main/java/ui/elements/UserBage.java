@@ -4,11 +4,11 @@ import com.codeborne.selenide.SelenideElement;
 
 public class UserBage extends BaseElement {
 
-    public UserBage(SelenideElement element) {
-        super(element);
-    }
+  public UserBage(SelenideElement element) {
+    super(element);
+  }
 
-    public String getUsername() {
-        return element.getOwnText().trim();
-    }
+  public String getUsername() {
+    return element.getOwnText().trim();
+  }
 }

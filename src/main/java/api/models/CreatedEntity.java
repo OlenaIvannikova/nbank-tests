@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatedEntity {
-    public Endpoint endpoint;
-    public Long id;
-    public DeletionCredentials credentials;
+  public Endpoint endpoint;
+  public Long id;
+  public DeletionCredentials credentials;
 }

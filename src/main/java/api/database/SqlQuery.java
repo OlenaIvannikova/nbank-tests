@@ -1,10 +1,9 @@
 package api.database;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-
-import java.util.List;
 
 /*
 SQL вместе с параметрами
@@ -16,6 +15,6 @@ SQL вместе с параметрами
 @Data
 @Getter
 public class SqlQuery {
-    String sql;
-    List<Object> parameters;
+  String sql;
+  List<Object> parameters;
 }

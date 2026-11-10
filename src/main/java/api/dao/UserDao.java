@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserDao {
-    private Long id;
-    private String username;
-    private String password;
-    private String role;
-    private String name;
+  private Long id;
+  private String username;
+  private String password;
+  private String role;
+  private String name;
 }

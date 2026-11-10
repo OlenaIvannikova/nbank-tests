@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountDeletionResponse extends BaseModel {
 
-    private String message;
-    private long accountId;
+  private String message;
+  private long accountId;
 }
-
