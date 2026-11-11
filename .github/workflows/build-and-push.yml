@@ -40,7 +40,7 @@ jobs:
 
       # Поднимаем инфраструктуру
       - name: Set up services
-        run: bash restart_docker.sh
+        run: bash start-infrastructure.sh
         working-directory: infra/docker_compose
 
       # Собираем проект, запускаем тесты и Checkstyle

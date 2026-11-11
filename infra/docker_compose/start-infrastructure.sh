@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Скрипт проверяет prerequisites, загружает браузерные образы и запускает инфраструктуру
+
 # Режимы безопасности Bash
 # set -euo pipefail
   # Это 3 режима безопасности Bash:
@@ -15,14 +17,9 @@ PROJECT_DIR="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
 # Пути к конфигурационным файлам
 # Путь к Docker Compose
 COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
-
+ENV_FILE="$PROJECT_DIR/.env"
 # Путь к browsers.json
-json_file="$PROJECT_DIR/selenoid/config/browsers.json"
-
-# Проверяем обязательные переменные окружения
-: "${POSTGRES_DB:?POSTGRES_DB is not set}"
-: "${POSTGRES_USER:?POSTGRES_USER is not set}"
-: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set}"
+JSON_FILE="$PROJECT_DIR/selenoid/config/browsers.json"
 
 echo ">>> Checking prerequisites"
 
@@ -33,28 +30,42 @@ if ! command -v jq &> /dev/null; then
 fi
 
 # Проверяем существование browsers.json файла
-if [[ ! -f "$json_file" ]]; then
-    echo "ERROR: browsers.json not found: $json_file"
+if [[ ! -f "$JSON_FILE" ]]; then
+    echo "ERROR: browsers.json not found: $JSON_FILE"
     exit 1
+fi
+
+# Проверяем существование docker-compose.yml файла
+if [[ ! -f "$COMPOSE_FILE" ]]; then
+    echo "ERROR: docker-compose.yml not found: $COMPOSE_FILE"
+    exit 1
+fi
+
+# Проверяем существование .env файла
+if [[ -f "$ENV_FILE" ]]; then
+    echo ">>> Using .env file: $ENV_FILE"
+    ENV_FILE_OPTION=(--env-file "$ENV_FILE")
+else
+    echo ">>> .env file not found. Using environment variables."
+    ENV_FILE_OPTION=()
 fi
 
 echo ">>> Pulling browser images"
 
-# Извлекаем список образов из browsers.json и скачиваем каждый
+# Извлекаем список образов из browsers.json и скачиваем каждый образ
+IMAGES=$(jq -r '.. | objects | .image? // empty' "$JSON_FILE")
+
 while IFS= read -r image; do
     [[ -z "$image" ]] && continue
 
     echo "Pulling $image..."
     docker pull "$image"
 
-done < <(jq -r '.. | objects | .image? // empty' "$json_file")
-
-echo ">>> Stopping Docker Compose"
-
-docker compose -f "$COMPOSE_FILE" down
+done <<< "$IMAGES"
 
 echo ">>> Starting Docker Compose"
 
-docker compose -f "$COMPOSE_FILE" up -d
-
-echo ">>> Infrastructure started successfully"
+docker compose \
+    "${ENV_FILE_OPTION[@]}" \
+    -f "$COMPOSE_FILE" \
+    up -d --wait
