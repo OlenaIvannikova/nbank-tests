@@ -7,6 +7,7 @@ import static common.generators.RandomData.generateTransferAmount;
 
 import api.assertions.TransactionAssertions;
 import api.constants.messages.SuccessMessage;
+import api.dao.AccountDao;
 import api.dao.comparison.DaoAndModelAssertions;
 import api.models.*;
 import api.requests.steps.AdminSteps;
@@ -16,6 +17,7 @@ import api.specs.ResponseSpecs;
 import base.BaseTest;
 import common.annotations.APIVersion;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -29,7 +31,8 @@ public class TransferTest extends BaseTest {
   @Test
   public void userCanTransferMoneyToAnotherUserAccountTest() {
 
-    List<UserRequest> users = createTwoDifferentUsers();
+    List<UserRequest> users =
+        StepLogger.log("Create sender and receiver users", () -> createTwoDifferentUsers());
     UserRequest sender = users.get(0);
     UserRequest receiver = users.get(1);
 
@@ -37,7 +40,9 @@ public class TransferTest extends BaseTest {
     UserSteps receiverSteps = new UserSteps(receiver.getUsername(), receiver.getPassword());
 
     List<AccountResponse> accounts =
-        UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users);
+        StepLogger.log(
+            "Create accounts with non-zero balances for both users",
+            () -> UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users));
     AccountResponse senderAccount = accounts.get(0);
     AccountResponse receiverAccount = accounts.get(1);
 
@@ -53,81 +58,132 @@ public class TransferTest extends BaseTest {
     transferRequest.setAmount(amount);
 
     TransferResponse transferResponse =
-        senderSteps
-            .transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
-            .as(TransferResponse.class);
+        StepLogger.log(
+            "Execute money transfer between users",
+            () ->
+                senderSteps
+                    .transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
+                    .as(TransferResponse.class));
 
     // Проверили сообщение об успешном трансфере
-    softly
-        .assertThat(transferResponse.getMessage())
-        .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue());
-
-    AccountResponse senderAccountAfterTransfer = senderSteps.getAccountById(senderAccount.getId());
-    AccountResponse receiverAccountAfterTransfer =
-        receiverSteps.getAccountById(receiverAccount.getId());
-    BigDecimal senderBalanceAfter = senderAccountAfterTransfer.getBalance();
-    BigDecimal receiverBalanceAfter = receiverAccountAfterTransfer.getBalance();
+    StepLogger.log(
+        "Verify successful transfer response message",
+        () ->
+            softly
+                .assertThat(transferResponse.getMessage())
+                .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue()));
 
     // Проверили, что баланс отправителя уменьшился ровно на сумму трансфера
-    softly
-        .assertThat(senderBalanceAfter.setScale(2, RoundingMode.HALF_UP))
-        .isEqualByComparingTo(
-            senderBalanceBefore.subtract(amount).setScale(2, RoundingMode.HALF_UP));
+    AccountResponse senderAccountAfterTransfer =
+        StepLogger.log(
+            "Verify sender account balance after transfer",
+            () -> {
+              AccountResponse accountAfter = senderSteps.getAccountById(senderAccount.getId());
+
+              softly
+                  .assertThat(accountAfter.getBalance().setScale(2, RoundingMode.HALF_UP))
+                  .isEqualByComparingTo(
+                      senderBalanceBefore.subtract(amount).setScale(2, RoundingMode.HALF_UP));
+
+              return accountAfter;
+            });
+
     //  Проверили, что баланс получателя увеличился ровно на сумму трансфера
-    softly
-        .assertThat(receiverBalanceAfter.setScale(2, RoundingMode.HALF_UP))
-        .isEqualByComparingTo(receiverBalanceBefore.add(amount).setScale(2, RoundingMode.HALF_UP));
+    AccountResponse receiverAccountAfterTransfer =
+        StepLogger.log(
+            "Verify receiver account balance after transfer",
+            () -> {
+              AccountResponse accountAfter = receiverSteps.getAccountById(receiverAccount.getId());
+
+              softly
+                  .assertThat(accountAfter.getBalance().setScale(2, RoundingMode.HALF_UP))
+                  .isEqualByComparingTo(
+                      receiverBalanceBefore.add(amount).setScale(2, RoundingMode.HALF_UP));
+
+              return accountAfter;
+            });
 
     List<Transaction> senderAccountTransactions =
-        senderSteps.getAccountTransactions(senderAccount.getId());
-    TransactionAssertions.assertTransactionExists(
-        softly,
-        senderAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_OUT,
-        receiverAccount.getId());
+        StepLogger.log(
+            "Verify outgoing transfer transaction in sender account",
+            () -> {
+              List<Transaction> transactions =
+                  senderSteps.getAccountTransactions(senderAccount.getId());
+
+              TransactionAssertions.assertTransactionExists(
+                  softly,
+                  transactions,
+                  amount,
+                  TransactionType.TRANSFER_OUT,
+                  receiverAccount.getId());
+
+              return transactions;
+            });
 
     List<Transaction> receiverAccountTransactions =
-        receiverSteps.getAccountTransactions(receiverAccount.getId());
-    TransactionAssertions.assertTransactionExists(
-        softly,
-        receiverAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_IN,
-        senderAccount.getId());
+        StepLogger.log(
+            "Verify incoming transfer transaction in receiver account",
+            () -> {
+              List<Transaction> transactions =
+                  receiverSteps.getAccountTransactions(receiverAccount.getId());
+
+              TransactionAssertions.assertTransactionExists(
+                  softly, transactions, amount, TransactionType.TRANSFER_IN, senderAccount.getId());
+
+              return transactions;
+            });
 
     // DB check
-    DaoAndModelAssertions.assertThat(
-            senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId()))
-        .match();
-    DaoAndModelAssertions.assertThat(
-            receiverAccountAfterTransfer, DataBaseSteps.getAccountById(receiverAccount.getId()))
-        .match();
+    StepLogger.log(
+        "Verify sender account data against database",
+        () ->
+            DaoAndModelAssertions.assertThat(
+                    senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId()))
+                .match());
 
-    Transaction transferOut =
-        senderAccountTransactions.stream()
-            .filter(
-                transaction -> TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("TRANSFER_OUT transaction not found"));
-    DaoAndModelAssertions.assertThat(
-            transferOut,
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                    senderAccount.getId(), TransactionType.TRANSFER_OUT)
-                .getFirst())
-        .match();
+    StepLogger.log(
+        "Verify receiver account data against database",
+        () ->
+            DaoAndModelAssertions.assertThat(
+                    receiverAccountAfterTransfer,
+                    DataBaseSteps.getAccountById(receiverAccount.getId()))
+                .match());
 
-    Transaction transferIn =
-        receiverAccountTransactions.stream()
-            .filter(transaction -> TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("TRANSFER_IN transaction not found"));
-    DaoAndModelAssertions.assertThat(
-            transferIn,
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                    receiverAccount.getId(), TransactionType.TRANSFER_IN)
-                .getFirst())
-        .match();
+    StepLogger.log(
+        "Verify outgoing transfer transaction against database",
+        () -> {
+          Transaction transferOut =
+              senderAccountTransactions.stream()
+                  .filter(transaction ->
+                      TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
+                  .findFirst()
+                  .orElseThrow(() -> new AssertionError("TRANSFER_OUT transaction not found"));
+
+          DaoAndModelAssertions.assertThat(
+                  transferOut,
+                  DataBaseSteps.getAccountTransactionsByTransactionType(
+                          senderAccount.getId(), TransactionType.TRANSFER_OUT)
+                      .getFirst())
+              .match();
+        });
+
+    StepLogger.log(
+        "Verify incoming transfer transaction against database",
+        () -> {
+          Transaction transferIn =
+              receiverAccountTransactions.stream()
+                  .filter(transaction ->
+                      TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
+                  .findFirst()
+                  .orElseThrow(() -> new AssertionError("TRANSFER_IN transaction not found"));
+
+          DaoAndModelAssertions.assertThat(
+                  transferIn,
+                  DataBaseSteps.getAccountTransactionsByTransactionType(
+                          receiverAccount.getId(), TransactionType.TRANSFER_IN)
+                      .getFirst())
+              .match();
+        });
   }
 
   @Test
@@ -136,7 +192,10 @@ public class TransferTest extends BaseTest {
     UserRequest user = createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-    List<AccountResponse> accounts = userSteps.createTwoAccountsWithNonZeroBalanceForUser();
+    List<AccountResponse> accounts =
+        StepLogger.log(
+            "Create two accounts with non-zero balances for user",
+            () -> userSteps.createTwoAccountsWithNonZeroBalanceForUser());
     AccountResponse senderAccount = accounts.get(0);
     AccountResponse receiverAccount = accounts.get(1);
 
@@ -152,82 +211,131 @@ public class TransferTest extends BaseTest {
     transferRequest.setAmount(amount);
 
     TransferResponse transferResponse =
-        userSteps
-            .transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
-            .as(TransferResponse.class);
+        StepLogger.log(
+            "Execute money transfer between user's own accounts",
+            () ->
+                userSteps
+                    .transferMoney(transferRequest, ResponseSpecs.requestReturnsOK())
+                    .as(TransferResponse.class));
 
     // Проверили сообщение об успешном трансфере
-    softly
-        .assertThat(transferResponse.getMessage())
-        .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue());
-
-    AccountResponse senderAccountAfterTransfer = userSteps.getAccountById(senderAccount.getId());
-    AccountResponse receiverAccountAfterTransfer =
-        userSteps.getAccountById(receiverAccount.getId());
-    BigDecimal senderBalanceAfter = senderAccountAfterTransfer.getBalance();
-    BigDecimal receiverBalanceAfter = receiverAccountAfterTransfer.getBalance();
+    StepLogger.log(
+        "Verify successful transfer response message",
+        () ->
+            softly
+                .assertThat(transferResponse.getMessage())
+                .isEqualTo(SuccessMessage.TRANSFER_SUCCESSFUL.getValue()));
 
     // Проверили, что баланс отправителя уменьшился ровно на сумму трансфера
-    softly
-        .assertThat(senderBalanceAfter.setScale(2, RoundingMode.HALF_UP))
-        .isEqualByComparingTo(
-            senderBalanceBefore.subtract(amount).setScale(2, RoundingMode.HALF_UP));
+    AccountResponse senderAccountAfterTransfer =
+        StepLogger.log(
+            "Verify sender account balance after transfer",
+            () -> {
+              AccountResponse accountAfter = userSteps.getAccountById(senderAccount.getId());
+
+              softly
+                  .assertThat(accountAfter.getBalance().setScale(2, RoundingMode.HALF_UP))
+                  .isEqualByComparingTo(
+                      senderBalanceBefore.subtract(amount).setScale(2, RoundingMode.HALF_UP));
+
+              return accountAfter;
+            });
 
     //  Проверили, что баланс получателя увеличился ровно на сумму трансфера
-    softly
-        .assertThat(receiverBalanceAfter.setScale(2, RoundingMode.HALF_UP))
-        .isEqualByComparingTo(receiverBalanceBefore.add(amount).setScale(2, RoundingMode.HALF_UP));
+    AccountResponse receiverAccountAfterTransfer =
+        StepLogger.log(
+            "Verify receiver account balance after transfer",
+            () -> {
+              AccountResponse accountAfter = userSteps.getAccountById(receiverAccount.getId());
+
+              softly
+                  .assertThat(accountAfter.getBalance().setScale(2, RoundingMode.HALF_UP))
+                  .isEqualByComparingTo(
+                      receiverBalanceBefore.add(amount).setScale(2, RoundingMode.HALF_UP));
+
+              return accountAfter;
+            });
 
     List<Transaction> senderAccountTransactions =
-        userSteps.getAccountTransactions(senderAccount.getId());
-    TransactionAssertions.assertTransactionExists(
-        softly,
-        senderAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_OUT,
-        receiverAccount.getId());
+        StepLogger.log(
+            "Verify outgoing transfer transaction in sender account",
+            () -> {
+              List<Transaction> transactions =
+                  userSteps.getAccountTransactions(senderAccount.getId());
+
+              TransactionAssertions.assertTransactionExists(
+                  softly,
+                  transactions,
+                  amount,
+                  TransactionType.TRANSFER_OUT,
+                  receiverAccount.getId());
+
+              return transactions;
+            });
 
     List<Transaction> receiverAccountTransactions =
-        userSteps.getAccountTransactions(receiverAccount.getId());
-    TransactionAssertions.assertTransactionExists(
-        softly,
-        receiverAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_IN,
-        senderAccount.getId());
+        StepLogger.log(
+            "Verify incoming transfer transaction in receiver account",
+            () -> {
+              List<Transaction> transactions =
+                  userSteps.getAccountTransactions(receiverAccount.getId());
+
+              TransactionAssertions.assertTransactionExists(
+                  softly, transactions, amount, TransactionType.TRANSFER_IN, senderAccount.getId());
+
+              return transactions;
+            });
 
     // DB check
-    DaoAndModelAssertions.assertThat(
-            senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId()))
-        .match();
-    DaoAndModelAssertions.assertThat(
-            receiverAccountAfterTransfer, DataBaseSteps.getAccountById(receiverAccount.getId()))
-        .match();
+    StepLogger.log(
+        "Verify sender account data against database",
+        () ->
+            DaoAndModelAssertions.assertThat(
+                    senderAccountAfterTransfer, DataBaseSteps.getAccountById(senderAccount.getId()))
+                .match());
+    StepLogger.log(
+        "Verify receiver account data against database",
+        () ->
+            DaoAndModelAssertions.assertThat(
+                    receiverAccountAfterTransfer,
+                    DataBaseSteps.getAccountById(receiverAccount.getId()))
+                .match());
 
-    Transaction transferOut =
-        senderAccountTransactions.stream()
-            .filter(
-                transaction -> TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("TRANSFER_OUT transaction not found"));
-    DaoAndModelAssertions.assertThat(
-            transferOut,
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                    senderAccount.getId(), TransactionType.TRANSFER_OUT)
-                .getFirst())
-        .match();
+    StepLogger.log(
+        "Verify outgoing transfer transaction against database",
+        () -> {
+          Transaction transferOut =
+              senderAccountTransactions.stream()
+                  .filter(transaction ->
+                      TransactionType.TRANSFER_OUT.name().equals(transaction.getType()))
+                  .findFirst()
+                  .orElseThrow(() -> new AssertionError("TRANSFER_OUT transaction not found"));
 
-    Transaction transferIn =
-        receiverAccountTransactions.stream()
-            .filter(transaction -> TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError("TRANSFER_IN transaction not found"));
-    DaoAndModelAssertions.assertThat(
-            transferIn,
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                    receiverAccount.getId(), TransactionType.TRANSFER_IN)
-                .getFirst())
-        .match();
+          DaoAndModelAssertions.assertThat(
+                  transferOut,
+                  DataBaseSteps.getAccountTransactionsByTransactionType(
+                          senderAccount.getId(), TransactionType.TRANSFER_OUT)
+                      .getFirst())
+              .match();
+        });
+
+    StepLogger.log(
+        "Verify incoming transfer transaction against database",
+        () -> {
+          Transaction transferIn =
+              receiverAccountTransactions.stream()
+                  .filter(transaction ->
+                      TransactionType.TRANSFER_IN.name().equals(transaction.getType()))
+                  .findFirst()
+                  .orElseThrow(() -> new AssertionError("TRANSFER_IN transaction not found"));
+
+          DaoAndModelAssertions.assertThat(
+                  transferIn,
+                  DataBaseSteps.getAccountTransactionsByTransactionType(
+                          receiverAccount.getId(), TransactionType.TRANSFER_IN)
+                      .getFirst())
+              .match();
+        });
   }
 
   @ParameterizedTest
@@ -238,7 +346,10 @@ public class TransferTest extends BaseTest {
     UserRequest user = createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-    List<AccountResponse> accounts = userSteps.createTwoAccountsWithNonZeroBalanceForUser();
+    List<AccountResponse> accounts =
+        StepLogger.log(
+            "Create two accounts with non-zero balances for user",
+            () -> userSteps.createTwoAccountsWithNonZeroBalanceForUser());
     AccountResponse senderAccount = accounts.get(0);
     AccountResponse receiverAccount = accounts.get(1);
 
@@ -250,52 +361,85 @@ public class TransferTest extends BaseTest {
     transferRequest.setReceiverAccountId(receiverAccount.getId());
     transferRequest.setAmount(amount);
 
-    userSteps.transferMoney(transferRequest, ResponseSpecs.requestReturnsBadRequest(expectedError));
+    StepLogger.log(
+        "Verify that transfer with invalid amount is rejected",
+        () ->
+            userSteps.transferMoney(
+                transferRequest, ResponseSpecs.requestReturnsBadRequest(expectedError)));
 
-    BigDecimal senderBalanceAfter = userSteps.getAccountById(senderAccount.getId()).getBalance();
-    BigDecimal receiverBalanceAfter =
-        userSteps.getAccountById(receiverAccount.getId()).getBalance();
+    StepLogger.log(
+        "Verify sender account balance has not changed",
+        () -> {
+          BigDecimal senderBalanceAfter =
+              userSteps.getAccountById(senderAccount.getId()).getBalance();
 
-    softly.assertThat(senderBalanceAfter).isEqualByComparingTo(senderBalanceBefore);
-    softly.assertThat(receiverBalanceAfter).isEqualByComparingTo(receiverBalanceBefore);
+          softly.assertThat(senderBalanceAfter).isEqualByComparingTo(senderBalanceBefore);
+        });
 
-    List<Transaction> senderAccountTransactions =
-        userSteps.getAccountTransactions(senderAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        senderAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_OUT,
-        receiverAccount.getId());
+    StepLogger.log(
+        "Verify receiver account balance has not changed",
+        () -> {
+          BigDecimal receiverBalanceAfter =
+              userSteps.getAccountById(receiverAccount.getId()).getBalance();
 
-    List<Transaction> receiverAccountTransactions =
-        userSteps.getAccountTransactions(receiverAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        receiverAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_IN,
-        senderAccount.getId());
+          softly.assertThat(receiverBalanceAfter).isEqualByComparingTo(receiverBalanceBefore);
+        });
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in sender account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                userSteps.getAccountTransactions(senderAccount.getId()),
+                amount,
+                TransactionType.TRANSFER_OUT,
+                receiverAccount.getId()));
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in receiver account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                userSteps.getAccountTransactions(receiverAccount.getId()),
+                amount,
+                TransactionType.TRANSFER_IN,
+                senderAccount.getId()));
 
     // DB check
-    DaoAndModelAssertions.assertThat(
-            senderAccount, DataBaseSteps.getAccountById(senderAccount.getId()))
-        .match();
-    DaoAndModelAssertions.assertThat(
-            receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId()))
-        .match();
+    AccountDao senderAccountDao =
+        StepLogger.log(
+            "Get sender account from database",
+            () -> DataBaseSteps.getAccountById(senderAccount.getId()));
+    StepLogger.log(
+        "Verify sender account data against database",
+        () -> DaoAndModelAssertions.assertThat(senderAccount, senderAccountDao).match());
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                senderAccount.getId(), TransactionType.TRANSFER_OUT))
-        .isEmpty();
+    AccountDao receiverAccountDao =
+        StepLogger.log(
+            "Get receiver account from database",
+            () -> DataBaseSteps.getAccountById(receiverAccount.getId()));
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                receiverAccount.getId(), TransactionType.TRANSFER_IN))
-        .isEmpty();
+    StepLogger.log(
+        "Verify receiver account data against database",
+        () -> DaoAndModelAssertions.assertThat(receiverAccount, receiverAccountDao).match());
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        senderAccount.getId(), TransactionType.TRANSFER_OUT))
+                .isEmpty());
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        receiverAccount.getId(), TransactionType.TRANSFER_IN))
+                .isEmpty());
   }
 
   @Test
@@ -304,7 +448,10 @@ public class TransferTest extends BaseTest {
     UserRequest user = createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-    List<AccountResponse> accounts = userSteps.createTwoAccountsWithNonZeroBalanceForUser();
+    List<AccountResponse> accounts =
+        StepLogger.log(
+            "Create two accounts with non-zero balances for user",
+            () -> userSteps.createTwoAccountsWithNonZeroBalanceForUser());
     AccountResponse senderAccount = accounts.get(0);
     AccountResponse receiverAccount = accounts.get(1);
 
@@ -318,59 +465,94 @@ public class TransferTest extends BaseTest {
     transferRequest.setReceiverAccountId(receiverAccount.getId());
     transferRequest.setAmount(amount);
 
-    userSteps.transferMoney(
-        transferRequest, ResponseSpecs.requestReturnsBadRequest(INVALID_TRANSFER.getValue()));
+    StepLogger.log(
+        "Verify that transfer exceeding sender balance is rejected",
+        () ->
+            userSteps.transferMoney(
+                transferRequest,
+                ResponseSpecs.requestReturnsBadRequest(INVALID_TRANSFER.getValue())));
 
-    BigDecimal senderBalanceAfter = userSteps.getAccountById(senderAccount.getId()).getBalance();
-    BigDecimal receiverBalanceAfter =
-        userSteps.getAccountById(receiverAccount.getId()).getBalance();
+    StepLogger.log(
+        "Verify sender account balance has not changed",
+        () -> {
+          BigDecimal senderBalanceAfter =
+              userSteps.getAccountById(senderAccount.getId()).getBalance();
 
-    softly.assertThat(senderBalanceAfter).isEqualByComparingTo(senderBalanceBefore);
-    softly.assertThat(receiverBalanceAfter).isEqualByComparingTo(receiverBalanceBefore);
+          softly.assertThat(senderBalanceAfter).isEqualByComparingTo(senderBalanceBefore);
+        });
 
-    List<Transaction> senderAccountTransactions =
-        userSteps.getAccountTransactions(senderAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        senderAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_OUT,
-        receiverAccount.getId());
+    StepLogger.log(
+        "Verify receiver account balance has not changed",
+        () -> {
+          BigDecimal receiverBalanceAfter =
+              userSteps.getAccountById(receiverAccount.getId()).getBalance();
 
-    List<Transaction> receiverAccountTransactions =
-        userSteps.getAccountTransactions(receiverAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        receiverAccountTransactions,
-        amount,
-        TransactionType.TRANSFER_IN,
-        senderAccount.getId());
+          softly.assertThat(receiverBalanceAfter).isEqualByComparingTo(receiverBalanceBefore);
+        });
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in sender account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                userSteps.getAccountTransactions(senderAccount.getId()),
+                amount,
+                TransactionType.TRANSFER_OUT,
+                receiverAccount.getId()));
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in receiver account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                userSteps.getAccountTransactions(receiverAccount.getId()),
+                amount,
+                TransactionType.TRANSFER_IN,
+                senderAccount.getId()));
 
     // DB check
-    DaoAndModelAssertions.assertThat(
-            senderAccount, DataBaseSteps.getAccountById(senderAccount.getId()))
-        .match();
-    DaoAndModelAssertions.assertThat(
-            receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId()))
-        .match();
+    AccountDao senderAccountDao =
+        StepLogger.log(
+            "Get sender account from database",
+            () -> DataBaseSteps.getAccountById(senderAccount.getId()));
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                senderAccount.getId(), TransactionType.TRANSFER_OUT))
-        .isEmpty();
+    StepLogger.log(
+        "Verify sender account data against database",
+        () -> DaoAndModelAssertions.assertThat(senderAccount, senderAccountDao).match());
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                receiverAccount.getId(), TransactionType.TRANSFER_IN))
-        .isEmpty();
+    AccountDao receiverAccountDao =
+        StepLogger.log(
+            "Get receiver account from database",
+            () -> DataBaseSteps.getAccountById(receiverAccount.getId()));
+
+    StepLogger.log(
+        "Verify receiver account data against database",
+        () -> DaoAndModelAssertions.assertThat(receiverAccount, receiverAccountDao).match());
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        senderAccount.getId(), TransactionType.TRANSFER_OUT))
+                .isEmpty());
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        receiverAccount.getId(), TransactionType.TRANSFER_IN))
+                .isEmpty());
   }
 
   @Test
   public void userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() {
 
-    List<UserRequest> users = createTwoDifferentUsers();
+    List<UserRequest> users =
+        StepLogger.log("Create two different users", () -> createTwoDifferentUsers());
     UserRequest sender = users.get(0);
     UserRequest receiver = users.get(1);
 
@@ -378,7 +560,9 @@ public class TransferTest extends BaseTest {
     UserSteps receiverSteps = new UserSteps(receiver.getUsername(), receiver.getPassword());
 
     List<AccountResponse> accounts =
-        UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users);
+        StepLogger.log(
+            "Create accounts with non-zero balances for both users",
+            () -> UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users));
     AccountResponse ownAccount = accounts.get(0);
     AccountResponse accountOwnedByAnotherUser = accounts.get(1);
 
@@ -390,54 +574,88 @@ public class TransferTest extends BaseTest {
     transferRequest.setReceiverAccountId(ownAccount.getId());
     transferRequest.setAmount(generateTransferAmount(accountOwnedByAnotherUser.getBalance()));
 
-    senderSteps.transferMoney(transferRequest, ResponseSpecs.accountAccessForbidden());
+    StepLogger.log(
+        "Verify that user cannot transfer money from another user's account",
+        () -> senderSteps.transferMoney(transferRequest, ResponseSpecs.accountAccessForbidden()));
 
-    BigDecimal ownAccountBalanceAfter = senderSteps.getAccountById(ownAccount.getId()).getBalance();
-    BigDecimal accountOwnedByAnotherUserBalanceAfter =
-        receiverSteps.getAccountById(accountOwnedByAnotherUser.getId()).getBalance();
+    StepLogger.log(
+        "Verify own account balance has not changed",
+        () -> {
+          BigDecimal ownAccountBalanceAfter =
+              senderSteps.getAccountById(ownAccount.getId()).getBalance();
 
-    softly.assertThat(ownAccountBalanceAfter).isEqualByComparingTo(ownAccountBalanceBefore);
-    softly
-        .assertThat(accountOwnedByAnotherUserBalanceAfter)
-        .isEqualByComparingTo(accountOwnedByAnotherUserBalanceBefore);
+          softly.assertThat(ownAccountBalanceAfter).isEqualByComparingTo(ownAccountBalanceBefore);
+        });
 
-    List<Transaction> receiverAccountTransactions =
-        receiverSteps.getAccountTransactions(accountOwnedByAnotherUser.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        receiverAccountTransactions,
-        transferRequest.getAmount(),
-        TransactionType.TRANSFER_OUT,
-        accountOwnedByAnotherUser.getId());
+    StepLogger.log(
+        "Verify another user's account balance has not changed",
+        () -> {
+          BigDecimal accountBalanceAfter =
+              receiverSteps.getAccountById(accountOwnedByAnotherUser.getId()).getBalance();
 
-    List<Transaction> senderAccountTransactions =
-        senderSteps.getAccountTransactions(ownAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        senderAccountTransactions,
-        transferRequest.getAmount(),
-        TransactionType.TRANSFER_IN,
-        ownAccount.getId());
+          softly
+              .assertThat(accountBalanceAfter)
+              .isEqualByComparingTo(accountOwnedByAnotherUserBalanceBefore);
+        });
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in another user's account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                receiverSteps.getAccountTransactions(accountOwnedByAnotherUser.getId()),
+                transferRequest.getAmount(),
+                TransactionType.TRANSFER_OUT,
+                accountOwnedByAnotherUser.getId()));
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in own account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                senderSteps.getAccountTransactions(ownAccount.getId()),
+                transferRequest.getAmount(),
+                TransactionType.TRANSFER_IN,
+                ownAccount.getId()));
 
     // DB check
-    DaoAndModelAssertions.assertThat(ownAccount, DataBaseSteps.getAccountById(ownAccount.getId()))
-        .match();
-    DaoAndModelAssertions.assertThat(
-            accountOwnedByAnotherUser,
-            DataBaseSteps.getAccountById(accountOwnedByAnotherUser.getId()))
-        .match();
+    AccountDao ownAccountDao =
+        StepLogger.log(
+            "Get own account from database",
+            () -> DataBaseSteps.getAccountById(ownAccount.getId()));
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                ownAccount.getId(), TransactionType.TRANSFER_OUT))
-        .isEmpty();
+    StepLogger.log(
+        "Verify own account data against database",
+        () -> DaoAndModelAssertions.assertThat(ownAccount, ownAccountDao).match());
 
-    softly
-        .assertThat(
-            DataBaseSteps.getAccountTransactionsByTransactionType(
-                accountOwnedByAnotherUser.getId(), TransactionType.TRANSFER_IN))
-        .isEmpty();
+    AccountDao anotherUserAccountDao =
+        StepLogger.log(
+            "Get another user's account from database",
+            () -> DataBaseSteps.getAccountById(accountOwnedByAnotherUser.getId()));
+
+    StepLogger.log(
+        "Verify another user's account data against database",
+        () ->
+            DaoAndModelAssertions.assertThat(accountOwnedByAnotherUser, anotherUserAccountDao)
+                .match());
+
+    StepLogger.log(
+        "Verify no outgoing transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        accountOwnedByAnotherUser.getId(), TransactionType.TRANSFER_OUT))
+                .isEmpty());
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in database",
+        () ->
+            softly
+                .assertThat(
+                    DataBaseSteps.getAccountTransactionsByTransactionType(
+                        ownAccount.getId(), TransactionType.TRANSFER_IN))
+                .isEmpty());
   }
 
   @Test
@@ -446,7 +664,8 @@ public class TransferTest extends BaseTest {
     UserRequest user = AdminSteps.createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-    AccountResponse receiverAccount = userSteps.createAccount();
+    AccountResponse receiverAccount =
+        StepLogger.log("Create receiver account", () -> userSteps.createAccount());
     BigDecimal receiverAccountBalanceBefore = receiverAccount.getBalance();
 
     Long nonExistentAccountId = Long.MAX_VALUE;
@@ -456,28 +675,49 @@ public class TransferTest extends BaseTest {
     transferRequest.setReceiverAccountId(receiverAccount.getId());
     transferRequest.setAmount(TransferAmount.MAX_ALLOWED.getAmount());
 
-    userSteps.transferMoney(transferRequest, ResponseSpecs.accountAccessForbidden());
+    StepLogger.log(
+        "Verify that user cannot transfer money from non-existent account",
+        () -> userSteps.transferMoney(transferRequest, ResponseSpecs.accountAccessForbidden()));
 
-    BigDecimal receiverAccountBalanceAfter =
-        userSteps.getAccountById(receiverAccount.getId()).getBalance();
-    softly
-        .assertThat(receiverAccountBalanceAfter)
-        .isEqualByComparingTo(receiverAccountBalanceBefore);
+    StepLogger.log(
+        "Verify receiver account balance has not changed",
+        () -> {
+          BigDecimal receiverAccountBalanceAfter =
+              userSteps.getAccountById(receiverAccount.getId()).getBalance();
 
-    List<Transaction> receiverTransactions =
-        userSteps.getAccountTransactions(receiverAccount.getId());
-    TransactionAssertions.assertTransactionDoesNotExist(
-        softly,
-        receiverTransactions,
-        transferRequest.getAmount(),
-        TransactionType.TRANSFER_IN,
-        nonExistentAccountId);
+          softly
+              .assertThat(receiverAccountBalanceAfter)
+              .isEqualByComparingTo(receiverAccountBalanceBefore);
+        });
+
+    StepLogger.log(
+        "Verify no incoming transfer transaction exists in receiver account",
+        () ->
+            TransactionAssertions.assertTransactionDoesNotExist(
+                softly,
+                userSteps.getAccountTransactions(receiverAccount.getId()),
+                transferRequest.getAmount(),
+                TransactionType.TRANSFER_IN,
+                nonExistentAccountId));
 
     // DB check
-    softly.assertThat(DataBaseSteps.getAccountById(nonExistentAccountId)).isNull();
-    DaoAndModelAssertions.assertThat(
-            receiverAccount, DataBaseSteps.getAccountById(receiverAccount.getId()))
-        .match();
-    softly.assertThat(DataBaseSteps.getAccountTransactions(nonExistentAccountId)).isEmpty();
+    StepLogger.log(
+        "Verify non-existent sender account is not present in database",
+        () -> softly.assertThat(DataBaseSteps.getAccountById(nonExistentAccountId)).isNull());
+    AccountDao receiverAccountDao =
+        StepLogger.log(
+            "Get receiver account from database",
+            () -> DataBaseSteps.getAccountById(receiverAccount.getId()));
+
+    StepLogger.log(
+        "Verify receiver account data against database",
+        () -> DaoAndModelAssertions.assertThat(receiverAccount, receiverAccountDao).match());
+
+    StepLogger.log(
+        "Verify no transactions exist for non-existent sender account in database",
+        () ->
+            softly
+                .assertThat(DataBaseSteps.getAccountTransactions(nonExistentAccountId))
+                .isEmpty());
   }
 }

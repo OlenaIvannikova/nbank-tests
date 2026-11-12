@@ -1,5 +1,6 @@
 package common.utils;
 
+import common.helpers.StepLogger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class RetryUtils {
 
     for (int attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        T result = action.get();
+        T result = StepLogger.log("Attempt " + attempt + ": ", () -> action.get());
 
         if (condition.test(result)) {
           return result;

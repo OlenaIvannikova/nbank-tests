@@ -16,6 +16,7 @@ import common.annotations.FraudCheckMock;
 import common.extensions.FraudCheckWireMockExtension;
 import common.extensions.TimingExtension;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Disabled;
@@ -36,13 +37,17 @@ public class TransferWithFraudCheckTest extends BaseTest {
       requiresManualReview = false,
       additionalVerificationRequired = false)
   public void testTransferWithFraudCheck() {
-    List<UserRequest> users = createTwoDifferentUsers();
+    List<UserRequest> users =
+        StepLogger.log("Create two different users", () -> createTwoDifferentUsers());
     UserRequest sender = users.get(0);
 
     UserSteps senderSteps = new UserSteps(sender.getUsername(), sender.getPassword());
 
     List<AccountResponse> accounts =
-        UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users);
+        StepLogger.log(
+            "Create accounts with non-zero balances for both users",
+            () -> UserSteps.createTwoAccountsWithNonZeroBalanceForDifferentUsers(users));
+
     AccountResponse senderAccount = accounts.get(0);
     AccountResponse receiverAccount = accounts.get(1);
 
@@ -53,11 +58,16 @@ public class TransferWithFraudCheckTest extends BaseTest {
     transferRequest.setAmount(amount);
 
     TransferResponse transferResponse =
-        senderSteps
-            .transferWithFraudCheck(transferRequest, ResponseSpecs.requestReturnsOK())
-            .as(TransferResponse.class);
+        StepLogger.log(
+            "Execute transfer with fraud check",
+            () ->
+                senderSteps
+                    .transferWithFraudCheck(transferRequest, ResponseSpecs.requestReturnsOK())
+                    .as(TransferResponse.class));
 
-    softly.assertThat(transferResponse).isNotNull();
+    StepLogger.log(
+        "Verify that transfer response is not null",
+        () -> softly.assertThat(transferResponse).isNotNull());
 
     TransferResponse expectedResponse =
         TransferResponse.builder()
@@ -72,6 +82,8 @@ public class TransferWithFraudCheckTest extends BaseTest {
             .requiresVerification(false)
             .build();
 
-    ModelAssertions.assertThatModels(expectedResponse, transferResponse).match();
+    StepLogger.log(
+        "Verify fraud check response details",
+        () -> ModelAssertions.assertThatModels(expectedResponse, transferResponse).match());
   }
 }

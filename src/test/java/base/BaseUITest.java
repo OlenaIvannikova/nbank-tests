@@ -2,11 +2,13 @@ package base;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import common.configs.Config;
 import common.configs.Property;
 import common.extensions.AdminSessionExtension;
 import common.extensions.BrowserMatchExtension;
 import common.extensions.UserSessionExtension;
+import io.qameta.allure.selenide.AllureSelenide;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +33,9 @@ public class BaseUITest extends BaseTest {
             // режиме реального времени
             "enableLog", true, // Сохранять лог браузерной сессии
             "enableVideo", false));
+    SelenideLogger.addListener(
+        "AllureSelenide",
+        new AllureSelenide().screenshots(true).savePageSource(true).includeSelenideSteps(true));
   }
 
   @AfterEach

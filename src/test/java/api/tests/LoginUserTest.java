@@ -12,6 +12,7 @@ import base.BaseTest;
 import common.configs.Config;
 import common.configs.Property;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +27,12 @@ public class LoginUserTest extends BaseTest {
             .password(Config.getProperty(Property.ADMIN_PASSWORD))
             .build();
 
-    new CrudRequester(RequestSpecs.unauthSpec(), Endpoint.LOGIN, ResponseSpecs.requestReturnsOK())
-        .post(loginUserRequest);
+    StepLogger.log(
+        "Verify that administrator can generate authentication token",
+        () ->
+            new CrudRequester(
+                    RequestSpecs.unauthSpec(), Endpoint.LOGIN, ResponseSpecs.requestReturnsOK())
+                .post(loginUserRequest));
   }
 
   @Test
@@ -40,8 +45,12 @@ public class LoginUserTest extends BaseTest {
     loginUserRequest.setPassword(userRequest.getPassword());
 
     // user generates auth token
-    new CrudRequester(RequestSpecs.unauthSpec(), Endpoint.LOGIN, ResponseSpecs.requestReturnsOK())
-        .post(loginUserRequest)
-        .header(HttpHeaders.AUTHORIZATION, Matchers.notNullValue());
+    StepLogger.log(
+        "Verify that user can generate authentication token",
+        () ->
+            new CrudRequester(
+                    RequestSpecs.unauthSpec(), Endpoint.LOGIN, ResponseSpecs.requestReturnsOK())
+                .post(loginUserRequest)
+                .header(HttpHeaders.AUTHORIZATION, Matchers.notNullValue()));
   }
 }

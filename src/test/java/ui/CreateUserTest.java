@@ -13,6 +13,7 @@ import base.BaseUITest;
 import common.annotations.AdminSession;
 import common.generators.RandomModelGenerator;
 import common.generators.TestDataStorage;
+import common.helpers.StepLogger;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import ui.pages.AdminPanelPage;
@@ -26,19 +27,27 @@ public class CreateUserTest extends BaseUITest {
 
     // Админ создает нового user и проверяем, что user отображается на UI
     UserRequest newUser = RandomModelGenerator.generate(UserRequest.class);
-    new AdminPanelPage()
-        .open()
-        .createUser(newUser.getUsername(), newUser.getPassword())
-        .checkAlertMessageAndAccept(AlertMessage.USER_CREATED.getValue());
+    StepLogger.log(
+        "Admin creates a new user through UI",
+        () ->
+            new AdminPanelPage()
+                .open()
+                .createUser(newUser.getUsername(), newUser.getPassword())
+                .checkAlertMessageAndAccept(AlertMessage.USER_CREATED.getValue()));
 
     // Проверяем создание пользователя через API
-    List<UserResponse> users = getAllUsers();
     UserResponse createdUser =
-        users.stream()
-            .filter(user -> user.getUsername().equals(newUser.getUsername()))
-            .findFirst()
-            .orElseThrow(() ->
-                new AssertionError("User was not found through API: " + newUser.getUsername()));
+        StepLogger.log(
+            "Verify that the created user exists through API",
+            () -> {
+              List<UserResponse> users = getAllUsers();
+              return users.stream()
+                  .filter(user -> user.getUsername().equals(newUser.getUsername()))
+                  .findFirst()
+                  .orElseThrow(() ->
+                      new AssertionError(
+                          "User was not found through API: " + newUser.getUsername()));
+            });
 
     // Регистрируем пользователя для удаления в @AfterEach
     TestDataStorage.getStorage()
@@ -49,21 +58,37 @@ public class CreateUserTest extends BaseUITest {
   @AdminSession
   public void adminCannotCreateUserWithInvalidDataTest() {
 
-    UserRequest newUser = RandomModelGenerator.generate(UserRequest.class);
-    newUser.setUsername(SHORT_USERNAME);
+    UserRequest newUser =
+        StepLogger.log(
+            "Generate test data with invalid username",
+            () -> {
+              UserRequest user = RandomModelGenerator.generate(UserRequest.class);
+              user.setUsername(SHORT_USERNAME);
+              return user;
+            });
 
-    assertTrue(
-        new AdminPanelPage()
-                .open()
-                .createUser(newUser.getUsername(), newUser.getPassword())
-                .checkAlertMessageAndAccept(
-                    AlertMessage.USER_CREATION_FAILED_INVALID_USERNAME.getValue())
-                .getAllUsers()
-                .stream()
-                .noneMatch(userBage -> userBage.getUsername().equals(newUser.getUsername())));
+    StepLogger.log(
+        "Admin cannot create a user with invalid username through UI",
+        () ->
+            assertTrue(
+                new AdminPanelPage()
+                        .open()
+                        .createUser(newUser.getUsername(), newUser.getPassword())
+                        .checkAlertMessageAndAccept(
+                            AlertMessage.USER_CREATION_FAILED_INVALID_USERNAME.getValue())
+                        .getAllUsers()
+                        .stream()
+                        .noneMatch(
+                            userBage -> userBage.getUsername().equals(newUser.getUsername()))));
 
     // Проверяем, что user не создан на API
-    List<UserResponse> users = getAllUsers();
-    assertThat(users).extracting(UserResponse::getUsername).doesNotContain(newUser.getUsername());
+    StepLogger.log(
+        "Verify that the user was not created through API",
+        () -> {
+          List<UserResponse> users = getAllUsers();
+          assertThat(users)
+              .extracting(UserResponse::getUsername)
+              .doesNotContain(newUser.getUsername());
+        });
   }
 }

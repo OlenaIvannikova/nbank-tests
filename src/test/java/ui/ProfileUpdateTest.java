@@ -9,6 +9,7 @@ import api.models.ProfileRequest;
 import base.BaseUITest;
 import common.annotations.UserSession;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import common.storage.SessionStorage;
 import org.junit.jupiter.api.Test;
 import ui.pages.ProfilePage;
@@ -20,15 +21,21 @@ public class ProfileUpdateTest extends BaseUITest {
   public void userCanUpdateProfileTest() {
     ProfileRequest profileRequest = RandomModelGenerator.generate(ProfileRequest.class);
 
-    new ProfilePage()
-        .open()
-        .editProfile(profileRequest.getName())
-        .checkAlertMessageAndAccept(USERNAME_UPDATED.getValue());
+    StepLogger.log(
+        "User updates profile through UI",
+        () ->
+            new ProfilePage()
+                .open()
+                .editProfile(profileRequest.getName())
+                .checkAlertMessageAndAccept(USERNAME_UPDATED.getValue()));
 
     // Проверяем, что username отредактирован на API
-    assertThat(SessionStorage.getSteps().getProfile().getName())
-        .as("name")
-        .isEqualTo(profileRequest.getName());
+    StepLogger.log(
+        "Verify that username was updated through API",
+        () ->
+            assertThat(SessionStorage.getSteps().getProfile().getName())
+                .as("name")
+                .isEqualTo(profileRequest.getName()));
   }
 
   @Test
@@ -38,12 +45,18 @@ public class ProfileUpdateTest extends BaseUITest {
     ProfileRequest profileRequest = RandomModelGenerator.generate(ProfileRequest.class);
     profileRequest.setName(ONE_WORD_NAME);
 
-    new ProfilePage()
-        .open()
-        .editProfile(profileRequest.getName())
-        .checkAlertMessageAndAccept(NAME_MUST_CONTAIN_TWO_WORDS_WITH_LETTERS_ONLY.getValue());
+    StepLogger.log(
+        "User cannot update profile with invalid name through UI",
+        () ->
+            new ProfilePage()
+                .open()
+                .editProfile(profileRequest.getName())
+                .checkAlertMessageAndAccept(
+                    NAME_MUST_CONTAIN_TWO_WORDS_WITH_LETTERS_ONLY.getValue()));
 
     // Проверяем, что username не отредактирован на API
-    assertThat(SessionStorage.getSteps().getProfile().getName()).as("name").isNull();
+    StepLogger.log(
+        "Verify that username was not updated through API",
+        () -> assertThat(SessionStorage.getSteps().getProfile().getName()).as("name").isNull());
   }
 }

@@ -8,6 +8,8 @@ import api.requests.skeleton.HttpRequest;
 import api.requests.skeleton.interfaces.CrudEndpointInterface;
 import api.requests.skeleton.interfaces.GetAllEndpointInterface;
 import api.validation.PathParamValidator;
+import common.configs.Config;
+import common.configs.Property;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
@@ -16,6 +18,7 @@ import java.util.Map;
 // Необходим в случае неуспешных запросов
 public class CrudRequester extends HttpRequest
     implements CrudEndpointInterface, GetAllEndpointInterface {
+  private static final String API_VERSION = Config.getProperty(Property.API_VERSION);
 
   public CrudRequester(
       RequestSpecification requestSpecification,
@@ -32,7 +35,7 @@ public class CrudRequester extends HttpRequest
     return given()
         .spec(requestSpecification)
         .body(body)
-        .post(endpoint.getUrl())
+        .post(API_VERSION + endpoint.getUrl())
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -42,7 +45,7 @@ public class CrudRequester extends HttpRequest
   public ValidatableResponse get(Long id) {
     return given()
         .spec(requestSpecification)
-        .get(endpoint.getUrl() + "/" + id)
+        .get(API_VERSION + endpoint.getUrl() + "/" + id)
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -52,7 +55,7 @@ public class CrudRequester extends HttpRequest
   public ValidatableResponse get() {
     return given()
         .spec(requestSpecification)
-        .get(endpoint.getUrl())
+        .get(API_VERSION + endpoint.getUrl())
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -60,7 +63,7 @@ public class CrudRequester extends HttpRequest
 
   @Override
   public ValidatableResponse getAllByPathParams(Map<String, ?> pathParams) {
-    String url = endpoint.getUrl();
+    String url = API_VERSION + endpoint.getUrl();
 
     PathParamValidator.validate(url, pathParams);
 
@@ -78,7 +81,7 @@ public class CrudRequester extends HttpRequest
     return given()
         .spec(requestSpecification)
         .body(model)
-        .put(endpoint.getUrl() + "/" + id)
+        .put(API_VERSION + endpoint.getUrl() + "/" + id)
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -89,7 +92,7 @@ public class CrudRequester extends HttpRequest
     return given()
         .spec(requestSpecification)
         .body(model)
-        .put(endpoint.getUrl())
+        .put(API_VERSION + endpoint.getUrl())
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -99,7 +102,7 @@ public class CrudRequester extends HttpRequest
   public ValidatableResponse delete(Long id) {
     return given()
         .spec(requestSpecification)
-        .delete(endpoint.getUrl() + "/" + id)
+        .delete(API_VERSION + endpoint.getUrl() + "/" + id)
         .then()
         .assertThat()
         .spec(responseSpecification);
@@ -109,7 +112,7 @@ public class CrudRequester extends HttpRequest
   public ValidatableResponse getAll(Class<?> clazz) {
     return given()
         .spec(requestSpecification)
-        .get(endpoint.getUrl())
+        .get(API_VERSION + endpoint.getUrl())
         .then()
         .assertThat()
         .spec(responseSpecification);

@@ -7,6 +7,7 @@ import api.requests.skeleton.requesters.ValidatedCrudRequester;
 import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
 import java.util.List;
@@ -63,7 +64,6 @@ public class UserSteps {
 
   public Response transferMoney(
       TransferRequest transferRequest, ResponseSpecification responseSpec) {
-
     return new CrudRequester(
             RequestSpecs.authAsUser(username, password), Endpoint.TRANSFER, responseSpec)
         .post(transferRequest)
@@ -84,38 +84,54 @@ public class UserSteps {
   }
 
   public AccountResponse getAccountById(Long accountId) {
-    return new ValidatedCrudRequester<AccountResponse>(
-            RequestSpecs.authAsUser(username, password),
-            Endpoint.CUSTOMER_ACCOUNTS,
-            ResponseSpecs.requestReturnsOK())
-        .getAll(AccountResponse[].class).stream()
-            .filter(account -> account.getId().equals(accountId))
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("Account not found: " + accountId));
+    return StepLogger.log(
+        "User gets account by account id " + accountId,
+        () ->
+            new ValidatedCrudRequester<AccountResponse>(
+                    RequestSpecs.authAsUser(username, password),
+                    Endpoint.CUSTOMER_ACCOUNTS,
+                    ResponseSpecs.requestReturnsOK())
+                .getAll(AccountResponse[].class).stream()
+                    .filter(account -> account.getId().equals(accountId))
+                    .findFirst()
+                    .orElseThrow(
+                        () -> new IllegalStateException("Account not found: " + accountId)));
   }
 
   public List<AccountResponse> getAccounts() {
-    return new ValidatedCrudRequester<AccountResponse>(
-            RequestSpecs.authAsUser(username, password),
-            Endpoint.CUSTOMER_ACCOUNTS,
-            ResponseSpecs.requestReturnsOK())
-        .getAll(AccountResponse[].class);
+    return StepLogger.log(
+        "Get all user accounts",
+        () ->
+            new ValidatedCrudRequester<AccountResponse>(
+                    RequestSpecs.authAsUser(username, password),
+                    Endpoint.CUSTOMER_ACCOUNTS,
+                    ResponseSpecs.requestReturnsOK())
+                .getAll(AccountResponse[].class));
   }
 
   public List<Transaction> getAccountTransactions(Long accountId) {
-    Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
-    String paramName = endpoint.getPathParamNames().getFirst();
+    return StepLogger.log(
+        "Get all account transactions",
+        () -> {
+          Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
+          String paramName = endpoint.getPathParamNames().getFirst();
 
-    return new ValidatedCrudRequester<Transaction>(
-            RequestSpecs.authAsUser(username, password), endpoint, ResponseSpecs.requestReturnsOK())
-        .getAllByPathParams(Map.of(paramName, accountId));
+          return new ValidatedCrudRequester<Transaction>(
+                  RequestSpecs.authAsUser(username, password),
+                  endpoint,
+                  ResponseSpecs.requestReturnsOK())
+              .getAllByPathParams(Map.of(paramName, accountId));
+        });
   }
 
   public UserResponse getProfile() {
-    return new ValidatedCrudRequester<UserResponse>(
-            RequestSpecs.authAsUser(username, password),
-            Endpoint.CUSTOMER_PROFILE_RETRIEVAL,
-            ResponseSpecs.requestReturnsOK())
-        .get();
+    return StepLogger.log(
+        "Get updated user profile",
+        () ->
+            new ValidatedCrudRequester<UserResponse>(
+                    RequestSpecs.authAsUser(username, password),
+                    Endpoint.CUSTOMER_PROFILE_RETRIEVAL,
+                    ResponseSpecs.requestReturnsOK())
+                .get());
   }
 }

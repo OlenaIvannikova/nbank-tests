@@ -16,6 +16,7 @@
         <junit.jupiter.version>5.12.2</junit.jupiter.version>
         <junit.jupiter.params.version>5.12.2</junit.jupiter.params.version>
         <junit.platform.commons>1.12.2</junit.platform.commons>
+        <junit.platform.launcher.version>1.12.2</junit.platform.launcher.version>
         <rest.assured.version>5.5.1</rest.assured.version>
         <lombok.version>1.18.38</lombok.version>
         <jackson.databind.version>2.19.0</jackson.databind.version>
@@ -31,6 +32,12 @@
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
         <checkstyle.version>14.4.0</checkstyle.version>
         <spotless.maven.plugin.version>3.11.0</spotless.maven.plugin.version>
+        <allure.junit5.version>2.29.1</allure.junit5.version>
+        <allure.rest-assured.version>2.29.1</allure.rest-assured.version>
+        <allure.selenide.version>2.29.1</allure.selenide.version>
+        <allure.assertj.version>2.29.1</allure.assertj.version>
+        <allure.maven.version>2.15.2</allure.maven.version>
+        <swagger.coverage.rest-assured.version>1.5.0</swagger.coverage.rest-assured.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -48,6 +55,12 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-commons</artifactId>
             <version>${junit.platform.commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.launcher.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -100,6 +113,31 @@
             <artifactId>wiremock-standalone</artifactId>
             <version>${wiremock.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.junit5.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.rest-assured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-selenide</artifactId>
+            <version>${allure.selenide.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-assertj</artifactId>
+            <version>${allure.assertj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.viclovsky</groupId>
+            <artifactId>swagger-coverage-rest-assured</artifactId>
+            <version>${swagger.coverage.rest-assured.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -145,7 +183,6 @@
                     <failOnViolation>true</failOnViolation>
                     <consoleOutput>true</consoleOutput>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
                     <execution>
@@ -188,6 +225,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure.maven.version}</version>
             </plugin>
         </plugins>
     </build>

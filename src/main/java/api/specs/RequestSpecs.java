@@ -1,16 +1,22 @@
 package api.specs;
 
+import static com.github.viclovsky.swagger.coverage.SwaggerCoverageConstants.OUTPUT_DIRECTORY;
+
 import api.models.LoginUserRequest;
 import api.requests.skeleton.Endpoint;
 import api.requests.skeleton.HttpHeaders;
 import api.requests.skeleton.requesters.CrudRequester;
+import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter;
+import com.github.viclovsky.swagger.coverage.SwaggerCoverageV3RestAssured;
 import common.configs.Config;
 import common.configs.Property;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,9 +33,14 @@ public class RequestSpecs {
     return new RequestSpecBuilder()
         .setContentType(ContentType.JSON)
         .setAccept(ContentType.JSON)
-        .addFilters(List.of(new RequestLoggingFilter(), new ResponseLoggingFilter()))
-        .setBaseUri(
-            Config.getProperty(Property.API_BASE_URL) + Config.getProperty(Property.API_VERSION));
+        .addFilters(
+            List.of(
+                new RequestLoggingFilter(),
+                new ResponseLoggingFilter(),
+                new AllureRestAssured(),
+                new SwaggerCoverageV3RestAssured(
+                    new FileSystemOutputWriter(Paths.get("target", OUTPUT_DIRECTORY)))))
+        .setBaseUri(Config.getProperty(Property.API_BASE_URL));
   }
 
   public static RequestSpecification unauthSpec() {

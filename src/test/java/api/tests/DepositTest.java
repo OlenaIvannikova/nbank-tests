@@ -18,6 +18,7 @@ import api.specs.ResponseSpecs;
 import base.BaseTest;
 import common.annotations.APIVersion;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import common.utils.RetryUtils;
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,30 +36,58 @@ public class DepositTest extends BaseTest {
 
     UserRequest user = AdminSteps.createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
-    AccountResponse account = userSteps.createAccount();
+    AccountResponse account =
+        StepLogger.log("Create account for user", () -> userSteps.createAccount());
 
-    DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
-    deposit.setId(account.getId());
-    deposit.setBalance(balance);
+    DepositRequest deposit =
+        StepLogger.log(
+            "Prepare deposit request",
+            () -> {
+              DepositRequest request = RandomModelGenerator.generate(DepositRequest.class);
+              request.setId(account.getId());
+              request.setBalance(balance);
+              return request;
+            });
+
     AccountResponse accountDetails =
-        userSteps.depositMoney(deposit, ResponseSpecs.requestReturnsOK()).as(AccountResponse.class);
+        StepLogger.log(
+            "Deposit money into account",
+            () ->
+                userSteps
+                    .depositMoney(deposit, ResponseSpecs.requestReturnsOK())
+                    .as(AccountResponse.class));
+
     AccountAssertions.assertDepositSuccessful(
         softly, accountDetails, deposit.getBalance(), account.getId());
 
     List<Transaction> accountTransactions = userSteps.getAccountTransactions(account.getId());
-    TransactionAssertions.assertTransactionExists(
-        softly,
-        accountTransactions,
-        deposit.getBalance(),
-        TransactionType.DEPOSIT,
-        account.getId());
+
+    StepLogger.log(
+        "Verify deposit transaction in transaction history",
+        () ->
+            TransactionAssertions.assertTransactionExists(
+                softly,
+                accountTransactions,
+                deposit.getBalance(),
+                TransactionType.DEPOSIT,
+                account.getId()));
+
+    List<TransactionDao> depositTransactions =
+        DataBaseSteps.getAccountTransactionsByTransactionType(
+            account.getId(), TransactionType.DEPOSIT);
 
     TransactionDao depositTransactionDao =
-        DataBaseSteps.getAccountTransactionsByTransactionType(
-                account.getId(), TransactionType.DEPOSIT)
-            .getFirst();
-    DaoAndModelAssertions.assertThat(deposit, depositTransactionDao).match();
-    assertThat(depositTransactionDao.getType()).isEqualTo(TransactionType.DEPOSIT.toString());
+        StepLogger.log("Get deposit transaction", depositTransactions::getFirst);
+
+    StepLogger.log(
+        "Verify deposit transaction matches database record",
+        () -> DaoAndModelAssertions.assertThat(deposit, depositTransactionDao).match());
+    StepLogger.log(
+        "Verify database transaction type",
+        () ->
+            softly
+                .assertThat(depositTransactionDao.getType())
+                .isEqualTo(TransactionType.DEPOSIT.toString()));
   }
 
   @Test
@@ -77,60 +106,87 @@ public class DepositTest extends BaseTest {
                     && accounts.stream().noneMatch(a -> a.getId().equals(nonExistentAccountId)),
             5,
             1000);
-    assertThat(userAccounts)
-        .extracting(AccountResponse::getId)
-        .doesNotContain(nonExistentAccountId);
+    StepLogger.log(
+        "Verify that account does not exist in user's account list",
+        () ->
+            assertThat(userAccounts)
+                .extracting(AccountResponse::getId)
+                .doesNotContain(nonExistentAccountId));
 
     DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
     deposit.setId(nonExistentAccountId);
-    userSteps.depositMoney(deposit, ResponseSpecs.accountAccessForbidden());
+    StepLogger.log(
+        "Verify that user cannot deposit money into non-existent account",
+        () -> userSteps.depositMoney(deposit, ResponseSpecs.accountAccessForbidden()));
 
     Endpoint endpoint = Endpoint.ACCOUNT_TRANSACTIONS;
     String paramName = endpoint.getPathParamNames().getFirst();
-    new CrudRequester(
-            RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
-            endpoint,
-            ResponseSpecs.accountAccessDenied())
-        .getAllByPathParams(Map.of(paramName, nonExistentAccountId));
+    StepLogger.log(
+        "Verify that user cannot access transactions of non-existent account",
+        () ->
+            new CrudRequester(
+                    RequestSpecs.authAsUser(user.getUsername(), user.getPassword()),
+                    endpoint,
+                    ResponseSpecs.accountAccessDenied())
+                .getAllByPathParams(Map.of(paramName, nonExistentAccountId)));
 
     List<TransactionDao> transactions = DataBaseSteps.getAccountTransactions(nonExistentAccountId);
-    assertThat(transactions).isEmpty();
+    StepLogger.log(
+        "Verify that no transactions exist for non-existent account in database",
+        () -> assertThat(transactions).isEmpty());
   }
 
   @Test
   public void userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() {
-    List<UserRequest> users = createTwoDifferentUsers();
+    List<UserRequest> users =
+        StepLogger.log("Create two different users", () -> createTwoDifferentUsers());
     UserRequest user1 = users.get(0);
     UserRequest user2 = users.get(1);
 
     UserSteps userSteps1 = new UserSteps(user1.getUsername(), user1.getPassword());
     UserSteps userSteps2 = new UserSteps(user2.getUsername(), user2.getPassword());
 
-    AccountResponse accountOwnedByAnotherUser = userSteps2.createAccount();
+    AccountResponse accountOwnedByAnotherUser =
+        StepLogger.log("Create account for the second user", () -> userSteps2.createAccount());
     BigDecimal accountOwnedByAnotherUserBalanceBefore = accountOwnedByAnotherUser.getBalance();
 
     List<Transaction> transactionsBefore =
-        userSteps2.getAccountTransactions(accountOwnedByAnotherUser.getId());
+        StepLogger.log(
+            "Get account transactions before deposit attempt",
+            () -> userSteps2.getAccountTransactions(accountOwnedByAnotherUser.getId()));
 
     DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
     deposit.setId(accountOwnedByAnotherUser.getId());
-    userSteps1.depositMoney(deposit, ResponseSpecs.accountAccessForbidden());
+    StepLogger.log(
+        "Verify that the first user cannot deposit money into the second user's account",
+        () -> userSteps1.depositMoney(deposit, ResponseSpecs.accountAccessForbidden()));
 
     // баланс счета не должен измениться
     BigDecimal accountOwnedByAnotherUserBalanceAfter =
-        userSteps2.getAccountById(accountOwnedByAnotherUser.getId()).getBalance();
-    softly
-        .assertThat(accountOwnedByAnotherUserBalanceBefore)
-        .isEqualByComparingTo(accountOwnedByAnotherUserBalanceAfter);
+        StepLogger.log(
+            "Get account balance after rejected deposit",
+            () -> userSteps2.getAccountById(accountOwnedByAnotherUser.getId()).getBalance());
+    StepLogger.log(
+        "Verify that account balance has not changed",
+        () ->
+            softly
+                .assertThat(accountOwnedByAnotherUserBalanceBefore)
+                .isEqualByComparingTo(accountOwnedByAnotherUserBalanceAfter));
 
     // отклонённый депозит не должен создавать никаких транзакций
     List<Transaction> transactionsAfter =
-        userSteps2.getAccountTransactions(accountOwnedByAnotherUser.getId());
-    softly.assertThat(transactionsAfter).containsExactlyElementsOf(transactionsBefore);
+        StepLogger.log(
+            "Get account transactions after rejected deposit",
+            () -> userSteps2.getAccountTransactions(accountOwnedByAnotherUser.getId()));
+    StepLogger.log(
+        "Verify that account transaction history has not changed",
+        () -> softly.assertThat(transactionsAfter).containsExactlyElementsOf(transactionsBefore));
 
     List<TransactionDao> transactions =
         DataBaseSteps.getAccountTransactions(accountOwnedByAnotherUser.getId());
-    assertThat(transactions).isEmpty();
+    StepLogger.log(
+        "Verify that no transactions were created in database",
+        () -> assertThat(transactions).isEmpty());
   }
 
   @ParameterizedTest
@@ -140,25 +196,44 @@ public class DepositTest extends BaseTest {
     UserRequest user = AdminSteps.createUser();
     UserSteps userSteps = new UserSteps(user.getUsername(), user.getPassword());
 
-    AccountResponse account = userSteps.createAccount();
+    AccountResponse account =
+        StepLogger.log("Create account for user", () -> userSteps.createAccount());
 
     BigDecimal accountBalanceBefore = account.getBalance();
-    List<Transaction> transactionsBefore = userSteps.getAccountTransactions(account.getId());
+    List<Transaction> transactionsBefore =
+        StepLogger.log(
+            "Get account transactions before deposit attempt",
+            () -> userSteps.getAccountTransactions(account.getId()));
 
     DepositRequest deposit = RandomModelGenerator.generate(DepositRequest.class);
     deposit.setId(account.getId());
     deposit.setBalance(balance);
-    userSteps.depositMoney(deposit, ResponseSpecs.requestReturnsBadRequest(expectedError));
+    StepLogger.log(
+        "Verify that deposit with invalid balance is rejected",
+        () ->
+            userSteps.depositMoney(deposit, ResponseSpecs.requestReturnsBadRequest(expectedError)));
 
     // баланс счета не должен измениться
-    BigDecimal accountBalanceAfter = userSteps.getAccountById(account.getId()).getBalance();
-    softly.assertThat(accountBalanceBefore).isEqualByComparingTo(accountBalanceAfter);
+    BigDecimal accountBalanceAfter =
+        StepLogger.log(
+            "Get account balance after rejected deposit",
+            () -> userSteps.getAccountById(account.getId()).getBalance());
+    StepLogger.log(
+        "Verify that account balance has not changed",
+        () -> softly.assertThat(accountBalanceBefore).isEqualByComparingTo(accountBalanceAfter));
 
     // отклонённый депозит не должен создавать никаких транзакций
-    List<Transaction> transactionsAfter = userSteps.getAccountTransactions(account.getId());
-    softly.assertThat(transactionsAfter).containsExactlyElementsOf(transactionsBefore);
+    List<Transaction> transactionsAfter =
+        StepLogger.log(
+            "Get account transactions after rejected deposit",
+            () -> userSteps.getAccountTransactions(account.getId()));
+    StepLogger.log(
+        "Verify that account transaction history has not changed",
+        () -> softly.assertThat(transactionsAfter).containsExactlyElementsOf(transactionsBefore));
 
     List<TransactionDao> transactions = DataBaseSteps.getAccountTransactions(account.getId());
-    assertThat(transactions).isEmpty();
+    StepLogger.log(
+        "Verify that no transactions were created in database",
+        () -> assertThat(transactions).isEmpty());
   }
 }

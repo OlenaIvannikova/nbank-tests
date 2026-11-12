@@ -3,6 +3,7 @@ package ui.pages;
 import static com.codeborne.selenide.Selenide.$;
 
 import com.codeborne.selenide.*;
+import common.helpers.StepLogger;
 import common.utils.RetryUtils;
 import java.util.List;
 import lombok.Getter;
@@ -28,8 +29,12 @@ public class AdminPanelPage extends BasePage<AdminPanelPage> {
   }
 
   public List<UserBage> getAllUsers() {
-    ElementsCollection elementsCollection = allUsersHeading.parent().findAll("li");
-    return generatePageElements(elementsCollection, UserBage::new);
+    return StepLogger.log(
+        "Get all users from Dashboard",
+        () -> {
+          ElementsCollection elementsCollection = allUsersHeading.parent().findAll("li");
+          return generatePageElements(elementsCollection, UserBage::new);
+        });
   }
 
   public UserBage findUserByUsername(String username) {

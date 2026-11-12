@@ -7,24 +7,30 @@ import api.requests.skeleton.requesters.ValidatedCrudRequester;
 import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
 import common.generators.RandomModelGenerator;
+import common.helpers.StepLogger;
 import java.util.List;
 
 public class AdminSteps {
 
   public static UserRequest createUser() {
-    UserRequest userRequest = RandomModelGenerator.generate(UserRequest.class);
+    UserRequest userRequest =
+        StepLogger.log(
+            "Generate random user data", () -> RandomModelGenerator.generate(UserRequest.class));
 
-    new ValidatedCrudRequester<UserResponse>(
-            RequestSpecs.adminSpec(),
-            Endpoint.ADMIN_USER_CREATION,
-            ResponseSpecs.entityWasCreated())
-        .post(userRequest);
+    return StepLogger.log(
+        "Create user as administrator",
+        () -> {
+          new ValidatedCrudRequester<UserResponse>(
+                  RequestSpecs.adminSpec(),
+                  Endpoint.ADMIN_USER_CREATION,
+                  ResponseSpecs.entityWasCreated())
+              .post(userRequest);
 
-    return userRequest;
+          return userRequest;
+        });
   }
 
   public static List<UserRequest> createTwoDifferentUsers() {
-
     UserRequest user1 = AdminSteps.createUser();
     UserRequest user2 = AdminSteps.createUser();
 
@@ -32,10 +38,13 @@ public class AdminSteps {
   }
 
   public static List<UserResponse> getAllUsers() {
-    return new ValidatedCrudRequester<UserResponse>(
-            RequestSpecs.adminSpec(),
-            Endpoint.ADMIN_USER_RETRIEVAL,
-            ResponseSpecs.requestReturnsOK())
-        .getAll(UserResponse[].class);
+    return StepLogger.log(
+        "Admin gets all users",
+        () ->
+            new ValidatedCrudRequester<UserResponse>(
+                    RequestSpecs.adminSpec(),
+                    Endpoint.ADMIN_USER_RETRIEVAL,
+                    ResponseSpecs.requestReturnsOK())
+                .getAll(UserResponse[].class));
   }
 }
