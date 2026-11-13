@@ -63,7 +63,11 @@ jobs:
       # -i target/swagger-coverage-output - каталог, в котором находятся файлы с результатами HTTP-запросов
       - name: Run Swagger coverage
         if: always()
-        run: .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://localhost:4111/v3/api-docs -i target/swagger-coverage-output
+        run:  |
+          chmod +x .swagger-coverage-commandline/bin/swagger-coverage-commandline
+          .swagger-coverage-commandline/bin/swagger-coverage-commandline \
+            -s http://localhost:4111/v3/api-docs \
+            -i target/swagger-coverage-output         
 
       # Загружаем историю предыдущих Allure-отчётов
       - name: Load test report history
@@ -75,12 +79,24 @@ jobs:
 
       # Генерируем Allure report с учётом истории предыдущих запусков
       - name: Build test report
-        uses: simple-elf/allure-report-action@v1.7
+        uses: simple-elf/allure-report-action@v1.15
         if: always()
         with:
           gh_pages: gh-pages # папка, куда предыдущим шагом была загружена ветка gh-pages
           allure_results: target/allure-results # каталог с результатами текущего запуска тестов
           allure_history: allure-history # каталог, в который Action формирует историю для последующего использования
+
+      # Создаём собственный API Coverage JSON для Allure (allure-report/widgets/coverage.json)
+      - name: Create API coverage JSON
+        if: always()
+        run: |
+          sudo chown -R runner:runner allure-report/widgets
+          bash create-api-coverage-json.sh
+
+      # Проверяем минимальный порог покрытия API
+      - name: Check API coverage quality gate
+        if: always()
+        run: bash check-api-coverage.sh
 
       # Генерируем Swagger coverage report
       # Шаг копирует HTML-отчёт Swagger Coverage в каталог allure-history, чтобы его можно было опубликовать вместе с Allure Report
