@@ -1,0 +1,34 @@
+<div>POST to http://localhost:4111/api/v1/accounts/deposit</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;id&quot;: 11,
+    &quot;balance&quot;: 4441.57,
+    &quot;accountId&quot;: 6973755773104965302,
+    &quot;amount&quot;: 1830.29,
+    &quot;description&quot;: &quot;d3613bda&quot;
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Authorization: Basic UnRUT08zZU06UllGZ25zZjMwNiYm</div>
+            <div>Accept: application/json, application/javascript, text/javascript, text/json</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X POST &#39;http://localhost:4111/api/v1/accounts/deposit&#39; -H &#39;Authorization: Basic UnRUT08zZU06UllGZ25zZjMwNiYm&#39; -H &#39;Accept: application/json, application/javascript, text/javascript, text/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;id&quot;: 11,
+    &quot;balance&quot;: 4441.57,
+    &quot;accountId&quot;: 6973755773104965302,
+    &quot;amount&quot;: 1830.29,
+    &quot;description&quot;: &quot;d3613bda&quot;
+}&#39;
+    </div>
+
