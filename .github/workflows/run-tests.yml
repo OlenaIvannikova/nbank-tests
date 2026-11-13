@@ -1,0 +1,120 @@
+name: Run tests
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+  run-tests:
+    name: Set up services (review apps) and run tests
+    runs-on: ubuntu-latest
+
+    env:
+      # Для Docker Compose / PostgreSQL
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+      # Для Java-тестов
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps: # шаги конкретной job
+      # Копируем файлы репозитория внутрь CI агента
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Устанавливаем Java
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+
+      # Кэшируем Maven-зависимости
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Поднимаем инфраструктуру
+      - name: Set up services
+        run: bash start-infrastructure.sh
+        working-directory: infra/docker_compose
+
+      # Собираем проект, запускаем тесты и Checkstyle
+      - name: Run tests
+        run: |
+          chmod +x ./mvnw
+          ./mvnw clean verify
+        env:
+          APIBASEURL: http://localhost:4111
+          APIVERSION: /api/v1
+          UIBASEURL: http://frontend
+          UIREMOTE: http://localhost:4444/wd/hub
+          DB_URL: jdbc:postgresql://localhost:5433/nbank
+          DB_LOGIN: ${{ secrets.POSTGRES_USER }}
+          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+      # Генерируем Swagger Coverage report
+      # .swagger-coverage-commandline/bin/swagger-coverage-commandline - путь к исполняемому файлу Swagger Coverage CLI
+      # -s http://localhost:4111/v3/api-docs - источник OpenAPI Specification (Swagger-документация backend)
+      # -i target/swagger-coverage-output - каталог, в котором находятся файлы с результатами HTTP-запросов
+      - name: Run Swagger coverage
+        if: always()
+        run:  |
+          chmod +x .swagger-coverage-commandline/bin/swagger-coverage-commandline
+          .swagger-coverage-commandline/bin/swagger-coverage-commandline \
+            -s http://localhost:4111/v3/api-docs \
+            -i target/swagger-coverage-output         
+
+      # Загружаем историю предыдущих Allure-отчётов
+      - name: Load test report history
+        uses: actions/checkout@v2 # загружаем содержимое отдельной ветки gh-pages
+        if: always()
+        with:
+          ref: gh-pages # какую ветку Git нужно загрузить для GitHub Pages content
+          path: gh-pages # в какую папку на GitHub Actions Runner нужно загрузить содержимое ветки
+
+      # Генерируем Allure report с учётом истории предыдущих запусков
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.15
+        if: always()
+        with:
+          gh_pages: gh-pages # папка, куда предыдущим шагом была загружена ветка gh-pages
+          allure_results: target/allure-results # каталог с результатами текущего запуска тестов
+          allure_history: allure-history # каталог, в который Action формирует историю для последующего использования
+
+      # Создаём собственный API Coverage JSON для Allure (allure-report/widgets/coverage.json)
+      - name: Create API coverage JSON
+        if: always()
+        run: |
+          sudo chown -R runner:runner allure-report/widgets
+          bash create-api-coverage-json.sh
+
+      # Проверяем минимальный порог покрытия API
+      - name: Check API coverage quality gate
+        if: always()
+        run: bash check-api-coverage.sh
+
+      # Генерируем Swagger coverage report
+      # Шаг копирует HTML-отчёт Swagger Coverage в каталог allure-history, чтобы его можно было опубликовать вместе с Allure Report
+      - name: Build Swagger coverage report
+        if: always()
+        run: sudo cp swagger-coverage-report.html allure-history/${{ github.run_number }}
+
+      # Публикуем содержимое папки allure-history в ветку gh-pages репозитория GitHub
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      # Останавливаем инфраструктуру
+      - name: Stop services
+        if: always()
+        run: docker compose down
+        working-directory: infra/docker_compose

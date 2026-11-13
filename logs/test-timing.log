@@ -1,0 +1,128 @@
+2026-10-30 06:22:56.451 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanCreateAccountTest() at 2026-10-30T10:22:56.439Z
+2026-10-30 06:23:16.102 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanCreateAccountTest() at 2026-10-30T10:23:16.102Z; duration=19663 ms
+2026-10-30 06:23:16.469 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanCreateUserWithCorrectDataTest() at 2026-10-30T10:23:16.469Z
+2026-10-30 06:23:17.577 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanCreateUserWithCorrectDataTest() at 2026-10-30T10:23:17.576Z; duration=1107 ms
+2026-10-30 06:23:18.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1]  , QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-30T10:23:18.386Z
+2026-10-30 06:23:24.572 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1]  , QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots, Username must be between 3 and 15 characters, Username cannot be blank] at 2026-10-30T10:23:24.572Z; duration=6186 ms
+2026-10-30 06:23:24.584 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] Z, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:24.584Z
+2026-10-30 06:23:25.304 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] Z, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.304Z; duration=720 ms
+2026-10-30 06:23:25.313 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] tJybcMZQqFKplRwnOeMB, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.313Z
+2026-10-30 06:23:25.959 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] tJybcMZQqFKplRwnOeMB, QAOlezr449&$, USER, username, [Username must be between 3 and 15 characters] at 2026-10-30T10:23:25.959Z; duration=646 ms
+2026-10-30 06:23:26.006 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] rgyj@, QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-30T10:23:26.006Z
+2026-10-30 06:23:26.537 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] rgyj@, QAOlezr449&$, USER, username, [Username must contain only letters, digits, dashes, underscores, and dots] at 2026-10-30T10:23:26.537Z; duration=531 ms
+2026-10-30 06:23:26.669 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] 0.01 at 2026-10-30T10:23:26.669Z
+2026-10-30 06:23:33.165 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] 0.01 at 2026-10-30T10:23:33.165Z; duration=6496 ms
+2026-10-30 06:23:33.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 691.83 at 2026-10-30T10:23:33.386Z
+2026-10-30 06:23:34.662 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 691.83 at 2026-10-30T10:23:34.662Z; duration=1276 ms
+2026-10-30 06:23:34.844 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 4999.99 at 2026-10-30T10:23:34.842Z
+2026-10-30 06:23:35.996 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 4999.99 at 2026-10-30T10:23:35.996Z; duration=1154 ms
+2026-10-30 06:23:36.191 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] 5000.00 at 2026-10-30T10:23:36.191Z
+2026-10-30 06:23:37.370 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] 5000.00 at 2026-10-30T10:23:37.370Z; duration=1179 ms
+2026-10-30 06:23:37.598 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] -0.10, Invalid account or amount at 2026-10-30T10:23:37.598Z
+2026-10-30 06:23:39.097 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] -0.10, Invalid account or amount at 2026-10-30T10:23:39.097Z; duration=1499 ms
+2026-10-30 06:23:39.317 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 0.00, Invalid account or amount at 2026-10-30T10:23:39.317Z
+2026-10-30 06:23:40.988 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 0.00, Invalid account or amount at 2026-10-30T10:23:40.988Z; duration=1671 ms
+2026-10-30 06:23:41.131 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 5000.10, Deposit amount exceeds the 5000 limit at 2026-10-30T10:23:41.131Z
+2026-10-30 06:23:42.604 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 5000.10, Deposit amount exceeds the 5000 limit at 2026-10-30T10:23:42.604Z; duration=1473 ms
+2026-10-30 06:23:42.793 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-30T10:23:42.793Z
+2026-10-30 06:23:43.875 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyIntoNonExistentAccountTest() at 2026-10-30T10:23:43.875Z; duration=1082 ms
+2026-10-30 06:23:44.026 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:44.026Z
+2026-10-30 06:23:45.782 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyIntoAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:45.782Z; duration=1756 ms
+2026-10-30 06:23:46.144 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanGenerateAuthTokenTest() at 2026-10-30T10:23:46.144Z
+2026-10-30 06:23:46.889 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanGenerateAuthTokenTest() at 2026-10-30T10:23:46.889Z; duration=745 ms
+2026-10-30 06:23:47.066 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanGenerateAuthTokenTest() at 2026-10-30T10:23:47.066Z
+2026-10-30 06:23:47.293 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanGenerateAuthTokenTest() at 2026-10-30T10:23:47.293Z; duration=227 ms
+2026-10-30 06:23:47.313 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanUpdateProfileTest() at 2026-10-30T10:23:47.313Z
+2026-10-30 06:23:48.837 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanUpdateProfileTest() at 2026-10-30T10:23:48.837Z; duration=1524 ms
+2026-10-30 06:23:49.030 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1]  , Name must contain two words with letters only at 2026-10-30T10:23:49.030Z
+2026-10-30 06:23:49.871 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1]  , Name must contain two words with letters only at 2026-10-30T10:23:49.871Z; duration=841 ms
+2026-10-30 06:23:50.031 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] mKHcYu, Name must contain two words with letters only at 2026-10-30T10:23:50.031Z
+2026-10-30 06:23:50.802 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] mKHcYu, Name must contain two words with letters only at 2026-10-30T10:23:50.802Z; duration=771 ms
+2026-10-30 06:23:50.949 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] lTFfvuK xenPIuN FtoDpnumyY, Name must contain two words with letters only at 2026-10-30T10:23:50.948Z
+2026-10-30 06:23:51.754 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] lTFfvuK xenPIuN FtoDpnumyY, Name must contain two words with letters only at 2026-10-30T10:23:51.754Z; duration=806 ms
+2026-10-30 06:23:51.926 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [4] lEdXAR 18576YkzyD, Name must contain two words with letters only at 2026-10-30T10:23:51.926Z
+2026-10-30 06:23:52.769 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [4] lEdXAR 18576YkzyD, Name must contain two words with letters only at 2026-10-30T10:23:52.769Z; duration=843 ms
+2026-10-30 06:23:52.940 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [5] KiLSokJIEp ^jlcKC, Name must contain two words with letters only at 2026-10-30T10:23:52.940Z
+2026-10-30 06:23:53.708 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [5] KiLSokJIEp ^jlcKC, Name must contain two words with letters only at 2026-10-30T10:23:53.708Z; duration=768 ms
+2026-10-30 06:23:53.886 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [6] Upm  FrujBZN, Name must contain two words with letters only at 2026-10-30T10:23:53.886Z
+2026-10-30 06:23:54.643 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [6] Upm  FrujBZN, Name must contain two words with letters only at 2026-10-30T10:23:54.643Z; duration=757 ms
+2026-10-30 06:23:54.828 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [7]  trmQa, Name must contain two words with letters only at 2026-10-30T10:23:54.828Z
+2026-10-30 06:23:55.594 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [7]  trmQa, Name must contain two words with letters only at 2026-10-30T10:23:55.594Z; duration=766 ms
+2026-10-30 06:23:55.755 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [8] BpC , Name must contain two words with letters only at 2026-10-30T10:23:55.755Z
+2026-10-30 06:23:56.506 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [8] BpC , Name must contain two words with letters only at 2026-10-30T10:23:56.506Z; duration=751 ms
+2026-10-30 06:23:56.684 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-30T10:23:56.684Z
+2026-10-30 06:24:00.204 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyFromAccountOwnedByAnotherUserTest() at 2026-10-30T10:24:00.204Z; duration=3520 ms
+2026-10-30 06:24:00.538 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-30T10:24:00.538Z
+2026-10-30 06:24:01.906 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyFromNonExistentAccountTest() at 2026-10-30T10:24:01.906Z; duration=1368 ms
+2026-10-30 06:24:02.116 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-30T10:24:02.116Z
+2026-10-30 06:24:04.632 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyBetweenOwnAccountsTest() at 2026-10-30T10:24:04.632Z; duration=2516 ms
+2026-10-30 06:24:04.914 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [1] -0.01, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:04.914Z
+2026-10-30 06:24:07.429 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [1] -0.01, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:07.429Z; duration=2515 ms
+2026-10-30 06:24:07.616 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [2] 0.00, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:07.616Z
+2026-10-30 06:24:10.265 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [2] 0.00, Invalid transfer: insufficient funds or invalid accounts at 2026-10-30T10:24:10.265Z; duration=2649 ms
+2026-10-30 06:24:10.474 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-30T10:24:10.474Z
+2026-10-30 06:24:12.814 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: [3] 10000.10, Transfer amount cannot exceed 10000 at 2026-10-30T10:24:12.814Z; duration=2340 ms
+2026-10-30 06:24:13.036 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-30T10:24:13.036Z
+2026-10-30 06:24:15.611 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithAmountExceedsSenderBalanceTest() at 2026-10-30T10:24:15.611Z; duration=2575 ms
+2026-10-30 06:24:15.824 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:24:15.823Z
+2026-10-30 06:24:19.244 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:24:19.244Z; duration=3421 ms
+2026-10-30 06:24:20.846 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:25.179 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:25.975 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanCreateAccountTest() at 2026-10-30T10:24:25.975Z
+2026-10-30 06:24:28.504 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanCreateAccountTest() at 2026-10-30T10:24:28.504Z; duration=2529 ms
+2026-10-30 06:24:28.819 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:31.786 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:32.386 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanCreateUserTest() at 2026-10-30T10:24:32.386Z
+2026-10-30 06:24:34.403 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanCreateUserTest() at 2026-10-30T10:24:34.403Z; duration=2017 ms
+2026-10-30 06:24:34.748 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:37.611 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:38.264 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCannotCreateUserWithInvalidDataTest() at 2026-10-30T10:24:38.264Z
+2026-10-30 06:24:40.342 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCannotCreateUserWithInvalidDataTest() at 2026-10-30T10:24:40.342Z; duration=2078 ms
+2026-10-30 06:24:40.888 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:43.363 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:44.190 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanDepositMoneyIntoAccountTest() at 2026-10-30T10:24:44.190Z
+2026-10-30 06:24:47.248 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanDepositMoneyIntoAccountTest() at 2026-10-30T10:24:47.248Z; duration=3058 ms
+2026-10-30 06:24:47.917 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:50.364 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:24:51.191 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-30T10:24:51.191Z
+2026-10-30 06:24:53.416 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithInvalidBalanceTest() at 2026-10-30T10:24:53.416Z; duration=2225 ms
+2026-10-30 06:24:54.223 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:24:56.544 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:00.251 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-30T10:25:00.251Z
+2026-10-30 06:25:02.623 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithBlankBalanceTest() at 2026-10-30T10:25:02.623Z; duration=2372 ms
+2026-10-30 06:25:03.432 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:05.816 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:06.652 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-30T10:25:06.651Z
+2026-10-30 06:25:08.624 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotDepositMoneyWithoutSelectedAccountTest() at 2026-10-30T10:25:08.624Z; duration=1973 ms
+2026-10-30 06:25:09.071 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanLoginWithCorrectDataTest() at 2026-10-30T10:25:09.071Z
+2026-10-30 06:25:09.628 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:11.883 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:13.666 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanLoginWithCorrectDataTest() at 2026-10-30T10:25:13.666Z; duration=4595 ms
+2026-10-30 06:25:13.896 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: adminCanLoginWithCorrectDataTest() at 2026-10-30T10:25:13.896Z
+2026-10-30 06:25:13.897 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:16.497 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:18.225 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: adminCanLoginWithCorrectDataTest() at 2026-10-30T10:25:18.225Z; duration=4329 ms
+2026-10-30 06:25:18.831 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:21.846 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:22.636 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-30T10:25:22.636Z
+2026-10-30 06:25:24.625 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotUpdateProfileWithInvalidDataTest() at 2026-10-30T10:25:24.625Z; duration=1989 ms
+2026-10-30 06:25:25.419 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:27.632 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:28.396 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanUpdateProfileTest() at 2026-10-30T10:25:28.396Z
+2026-10-30 06:25:30.510 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanUpdateProfileTest() at 2026-10-30T10:25:30.510Z; duration=2114 ms
+2026-10-30 06:25:31.401 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:33.661 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:34.438 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-30T10:25:34.438Z
+2026-10-30 06:25:37.498 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithoutSelectedRecipientAccountTest() at 2026-10-30T10:25:37.498Z; duration=3060 ms
+2026-10-30 06:25:38.509 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:41.142 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:41.992 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-30T10:25:41.992Z
+2026-10-30 06:25:45.858 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyWithInvalidAmountTest() at 2026-10-30T10:25:45.858Z; duration=3866 ms
+2026-10-30 06:25:46.874 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:49.570 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:50.379 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-30T10:25:50.379Z
+2026-10-30 06:25:53.856 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCannotTransferMoneyToNonExistentAccountTest() at 2026-10-30T10:25:53.856Z; duration=3477 ms
+2026-10-30 06:25:54.945 INFO  [main] c.c.s.WebDriverThreadLocalContainer - No webdriver is bound to current thread: 3 - let's create a new webdriver
+2026-10-30 06:25:57.306 INFO  [main] c.c.s.webdriver.WebDriverFactory - Selenide 7.9.1 / Selenium 4.31.0 / chrome 121.0.6167.85 linux
+2026-10-30 06:25:58.301 INFO  [main] common.extensions.TimingExtension - Thread main: Test started: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:25:58.301Z
+2026-10-30 06:26:02.277 INFO  [main] common.extensions.TimingExtension - Thread main: Test finished: userCanTransferMoneyToAnotherUserAccountTest() at 2026-10-30T10:26:02.276Z; duration=3975 ms

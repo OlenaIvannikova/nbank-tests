@@ -1,0 +1,82 @@
+package api.specs;
+
+import static com.github.viclovsky.swagger.coverage.SwaggerCoverageConstants.OUTPUT_DIRECTORY;
+
+import api.models.LoginUserRequest;
+import api.requests.skeleton.Endpoint;
+import api.requests.skeleton.HttpHeaders;
+import api.requests.skeleton.requesters.CrudRequester;
+import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter;
+import com.github.viclovsky.swagger.coverage.SwaggerCoverageV3RestAssured;
+import common.configs.Config;
+import common.configs.Property;
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+// Готовые шаблоны для настройки запросов (RequestSpecification)
+public class RequestSpecs {
+
+  // Для кеширования токенов
+  private static final Map<String, String> authHeaders = new ConcurrentHashMap<>();
+
+  private RequestSpecs() {}
+
+  private static RequestSpecBuilder defaultRequestBuilder() {
+    return new RequestSpecBuilder()
+        .setContentType(ContentType.JSON)
+        .setAccept(ContentType.JSON)
+        .addFilters(
+            List.of(
+                new RequestLoggingFilter(),
+                new ResponseLoggingFilter(),
+                new AllureRestAssured(),
+                new SwaggerCoverageV3RestAssured(
+                    new FileSystemOutputWriter(Paths.get("target", OUTPUT_DIRECTORY)))))
+        .setBaseUri(Config.getProperty(Property.API_BASE_URL));
+  }
+
+  public static RequestSpecification unauthSpec() {
+    return defaultRequestBuilder().build();
+  }
+
+  public static RequestSpecification adminSpec() {
+    return authAsUser(
+        Config.getProperty(Property.ADMIN_LOGIN), Config.getProperty(Property.ADMIN_PASSWORD));
+  }
+
+  public static RequestSpecification authAsUser(String username, String password) {
+    return defaultRequestBuilder()
+        .addHeader(HttpHeaders.AUTHORIZATION, getAuthHeader(username, password))
+        .build();
+  }
+
+  public static String getAuthHeader(String username, String password) {
+    return authHeaders.computeIfAbsent(
+        username,
+        key -> {
+          LoginUserRequest request =
+              LoginUserRequest.builder().username(username).password(password).build();
+
+          String authHeader =
+              new CrudRequester(
+                      RequestSpecs.unauthSpec(), Endpoint.LOGIN, ResponseSpecs.requestReturnsOK())
+                  .post(request)
+                  .extract()
+                  .header(HttpHeaders.AUTHORIZATION);
+
+          if (authHeader == null || authHeader.isBlank()) {
+            throw new IllegalStateException("Authorization header is missing from login response");
+          }
+
+          return authHeader;
+        });
+  }
+}

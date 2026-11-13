@@ -1,0 +1,24 @@
+package api.models;
+
+import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class TransferResponse extends BaseModel {
+  private long senderAccountId;
+  private long receiverAccountId;
+  private BigDecimal amount;
+  private String message;
+  private String status;
+  private Long transactionId;
+  private double fraudRiskScore;
+  private String fraudReason;
+  private boolean requiresVerification;
+  private boolean requiresManualReview;
+}
